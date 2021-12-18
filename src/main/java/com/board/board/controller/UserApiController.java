@@ -16,20 +16,16 @@ class UserApiController {
     @Autowired
     private UserRepository repository;
 
-    // Aggregate root
-    // tag::get-aggregate-root[]
     @GetMapping("/users")
     List<User> all() {
         return repository.findAll();
     }
-    // end::get-aggregate-root[]
 
     @PostMapping("/users")
     User newUser(@RequestBody User newUser) {
         return repository.save(newUser);
     }
 
-    // Single item
 
     @GetMapping("/users/{id}")
     User one(@PathVariable Long id) {

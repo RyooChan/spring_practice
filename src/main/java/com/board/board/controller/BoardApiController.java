@@ -16,8 +16,6 @@ class BoardApiController {
     @Autowired
     private BoardRepository repository;
 
-    // Aggregate root
-    // tag::get-aggregate-root[]
     @GetMapping("/boards")
     List<Board> all(@RequestParam(required = false, defaultValue = "") String title, @RequestParam(required = false, defaultValue = "") String content ) {
         if(StringUtils.isEmpty(title) && StringUtils.isEmpty(content)){
@@ -26,14 +24,12 @@ class BoardApiController {
             return repository.findByTitleOrContent(title, content);
         }
     }
-    // end::get-aggregate-root[]
 
     @PostMapping("/boards")
     Board newBoard(@RequestBody Board newBoard) {
         return repository.save(newBoard);
     }
 
-    // Single item
 
     @GetMapping("/boards/{id}")
     Board one(@PathVariable Long id) {
