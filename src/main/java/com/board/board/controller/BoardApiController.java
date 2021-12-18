@@ -16,9 +16,6 @@ class BoardApiController {
     @Autowired
     private BoardRepository repository;
 
-    @Autowired
-    private UserRepository userRepository;
-
     // Aggregate root
     // tag::get-aggregate-root[]
     @GetMapping("/boards")

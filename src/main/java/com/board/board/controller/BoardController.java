@@ -57,7 +57,7 @@ public class BoardController {
 
     @PostMapping("/form")
     public String form(@Valid Board board, BindingResult bindingResult, Authentication authentication){
-//        boardValidator.validate(board, bindingResult);
+
         if(bindingResult.hasErrors()){
             return "board/form";
         }

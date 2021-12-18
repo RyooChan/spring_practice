@@ -16,9 +16,6 @@ class UserApiController {
     @Autowired
     private UserRepository repository;
 
-    @Autowired
-    private UserRepository userRepository;
-
     // Aggregate root
     // tag::get-aggregate-root[]
     @GetMapping("/users")
