@@ -21,9 +21,10 @@ public class Board {
 
     private String content;
 
+    private String nickname;
+
     @ManyToOne
     @JoinColumn(name="user_id", referencedColumnName = "id")
     @JsonIgnore
     private User user;
-
 }
