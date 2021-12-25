@@ -31,4 +31,9 @@ public class AccountController {
         return "redirect:/";
     }
 
+    @GetMapping("/withdraw")
+    public String withdraw(){
+        return "account/withdraw";
+    }
+
 }
