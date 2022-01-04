@@ -23,7 +23,7 @@ public class Board {
 
     private String nickname;
 
-    // test3
+    // test4
 //    private long userId;
 
     @ManyToOne
