@@ -23,6 +23,8 @@ public class Board {
 
     private String nickname;
 
+//    private long userId;
+
     @ManyToOne
     @JoinColumn(name="user_id", referencedColumnName = "id")
     @JsonIgnore

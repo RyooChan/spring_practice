@@ -33,6 +33,8 @@ dependencies {
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
 
     implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
+
+    implementation 'commons-io:commons-io:2.6'  // 멀티사진 업로드
 }
 
 test {

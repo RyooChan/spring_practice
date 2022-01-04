@@ -7,6 +7,8 @@ import com.board.board.repository.BoardRepository;
 import com.board.board.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.thymeleaf.util.StringUtils;
 
@@ -53,7 +55,9 @@ class BoardApiController {
                 });
     }
 
-    @Secured("ROLE_ADMIN") // adming사용자만 delete 메소드를 호출할 수 있도록 한다.
+//    @PreAuthorize("(isAuthenticated() and ( #userid == authentication.principal.userid )  ) or hasRole('ROLE_ADMIN')")
+//    @PostAuthorize("returnObject.title == authentication.principal.username")
+    @Secured("ROLE_ADMIN") // admin사용자만 delete 메소드를 호출할 수 있도록 한다.
     @DeleteMapping("/boards/{id}")
     void deleteBoard(@PathVariable Long id) {
         repository.deleteById(id);
