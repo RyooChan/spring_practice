@@ -15,7 +15,7 @@
 
 <main role="main" class="container">
     <div class="container">
-        <form action="#" th:action="@{/board/form}" th:object="${board}" method="post">
+        <form action="#" th:action="@{/board/form}" th:object="${boardSaveDto}" method="post">
             <input type="hidden" th:field="*{id}">
             <div class="form-group mb-3 d-inline">
                 <label for="title">제목</label>

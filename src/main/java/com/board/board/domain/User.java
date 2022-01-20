@@ -1,7 +1,7 @@
 package com.board.board.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -9,6 +9,11 @@ import java.util.List;
 
 @Entity // DB와의 연결을 위하여
 @Data   // getter setter
+//@Getter
+//@Setter
+//@ToString
+//@EqualsAndHashCode
+//@RequiredArgsConstructor
 public class User {
     @Id // id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

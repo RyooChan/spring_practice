@@ -4,11 +4,9 @@ import java.util.List;
 
 import com.board.board.domain.Board;
 import com.board.board.repository.BoardRepository;
-import com.board.board.repository.UserRepository;
+import com.board.board.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PostAuthorize;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.thymeleaf.util.StringUtils;
 
@@ -18,6 +16,9 @@ class BoardApiController {
 
     @Autowired
     private BoardRepository repository;
+
+    @Autowired
+    private BoardService boardService;
 
     @GetMapping("/boards")
     List<Board> all(@RequestParam(required = false, defaultValue = "") String title, @RequestParam(required = false, defaultValue = "") String content ) {
@@ -42,7 +43,6 @@ class BoardApiController {
 
     @PutMapping("/boards/{id}")
     Board replaceBoard(@RequestBody Board newBoard, @PathVariable Long id) {
-
         return repository.findById(id)
                 .map(board -> {
                     board.setTitle(newBoard.getTitle());
@@ -62,4 +62,5 @@ class BoardApiController {
     void deleteBoard(@PathVariable Long id) {
         repository.deleteById(id);
     }
+
 }

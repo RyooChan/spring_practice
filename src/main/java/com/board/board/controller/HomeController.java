@@ -12,8 +12,4 @@ public class HomeController {
     }
 
 
-    @GetMapping("/mine")
-    public String mine(){
-        return "mine";
-    }
 }
