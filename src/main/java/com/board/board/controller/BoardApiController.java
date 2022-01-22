@@ -1,10 +1,14 @@
 package com.board.board.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import com.board.board.domain.Board;
+import com.board.board.dto.Board.BoardPostDto;
 import com.board.board.repository.BoardRepository;
+import com.board.board.service.BoardApiService;
 import com.board.board.service.BoardService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
@@ -17,16 +21,20 @@ class BoardApiController {
     @Autowired
     private BoardRepository repository;
 
-    @Autowired
-    private BoardService boardService;
+    private final BoardApiService boardApiService;
+
+    public BoardApiController(BoardApiService boardApiService) {
+        this.boardApiService = boardApiService;
+    }
 
     @GetMapping("/boards")
-    List<Board> all(@RequestParam(required = false, defaultValue = "") String title, @RequestParam(required = false, defaultValue = "") String content ) {
-        if(StringUtils.isEmpty(title) && StringUtils.isEmpty(content)){
-            return repository.findAll();
-        }else{
-            return repository.findByTitleOrContent(title, content);
-        }
+    List<BoardPostDto> all(@RequestParam(required = false, defaultValue = "") String title, @RequestParam(required = false, defaultValue = "") String content ) {
+//        if(StringUtils.isEmpty(title) && StringUtils.isEmpty(content)){
+//            return repository.findAll();
+//        }else{
+//            return repository.findByTitleOrContent(title, content);
+//        }
+        return boardApiService.findBoardApi(title, content);
     }
 
     @PostMapping("/boards")
