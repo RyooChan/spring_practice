@@ -24,8 +24,7 @@ import javax.sql.DataSource;
 @RequiredArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private DataSource dataSource;
+    private final DataSource dataSource;
 
     private final CustomOAuth2UserService customOAuth2UserService;
 
@@ -40,7 +39,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         .anyRequest().authenticated()
                 .and()
                     .formLogin()
-                    .loginPage("/account/login")
+                    .loginPage("/")     // 본래 로그인하는 곳으로 보내야 하지만, 나는 기본화면으로 보내서 알아서 로그인하도록 하였다.
                     .permitAll()
                 .and()
                     .logout()

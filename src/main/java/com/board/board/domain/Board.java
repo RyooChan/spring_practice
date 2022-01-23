@@ -1,5 +1,6 @@
 package com.board.board.domain;
 
+import com.board.board.domain.oauth.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
@@ -30,5 +31,5 @@ public class Board {
     @ManyToOne
     @JoinColumn(name="user_id", referencedColumnName = "id")
     @JsonIgnore
-    private User2 user;
+    private User user;
 }

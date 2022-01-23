@@ -3,10 +3,8 @@ package com.board.board.controller;
 import com.board.board.domain.Board;
 import com.board.board.dto.Board.BoardPostDto;
 import com.board.board.mapper.Board.BoardPostMapper;
-import com.board.board.repository.BoardRepository;
 import com.board.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -69,6 +67,8 @@ public class BoardController {
             return "board/form";
         }
         String username = authentication.getName();
+        System.out.println(username);
+        System.out.println("------------------------------------------");
         Board board = boardPostMapper.toEntity(boardPostDto);           // mapstruct를 사용하여 Dto의 정보를 entity로 바꾸어준다.
         boardPostMapper.updateFromDto(boardPostDto, board);             // null인 값들을 빼주기 위한 updateFromDto
 

@@ -1,9 +1,9 @@
 package com.board.board.service;
 
 import com.board.board.domain.Board;
-import com.board.board.domain.User2;
+import com.board.board.domain.oauth.User;
 import com.board.board.repository.BoardRepository;
-import com.board.board.repository.UserRepository2;
+import com.board.board.repository.oauth.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +19,7 @@ public class BoardService {
 //     autowired를 사용한 필드주입의 경우 외부에서 변경이 불가능하고, DI프레임워크가 필수적으로 필요하다.
     private final BoardRepository boardRepository;
 
-    private final UserRepository2 userRepository;
+    private final UserRepository userRepository;
 
     public List<Board> list(String searchText){
         return boardRepository.findByTitleContainingOrContentContaining(searchText, searchText);
@@ -27,7 +27,7 @@ public class BoardService {
 
     @Transactional
     public void save(String username, Board board){
-        User2 user = userRepository.findByUsername(username);    // user의 정보를 작성자 정보를 통해 받아온다.
+        User user = userRepository.findUserByEmail(username);    // user의 정보를 작성자 정보를 통해 받아온다.
         board.setUser(user);                                    // entity에 user정보를 적용해준다.
         boardRepository.save(board);
     }
