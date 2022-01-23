@@ -1,5 +1,7 @@
 package com.board.board.config;
 
+import com.board.board.service.oauth.CustomOAuth2UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,25 +21,36 @@ import javax.sql.DataSource;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private DataSource dataSource;
 
+    private final CustomOAuth2UserService customOAuth2UserService;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
-                .authorizeRequests()
-                    .antMatchers("/", "/account/register", "/bootstrap-5.1.3-dist/css/**", "/bootstrap-5.1.3-dist/js/**", "/api/**").permitAll()
-                    .anyRequest().authenticated()
-                    .and()
-                .formLogin()
+                .headers().frameOptions().disable() // h2-console 화면을 사용하기 위해 해당 옵션 disable
+                .and()
+                    .authorizeRequests()
+                        .antMatchers("/", "/account/register", "/bootstrap-5.1.3-dist/css/**", "/bootstrap-5.1.3-dist/js/**", "/api/**","/h2-console/**").permitAll()
+                        .anyRequest().authenticated()
+                .and()
+                    .formLogin()
                     .loginPage("/account/login")
                     .permitAll()
-                    .and()
-                .logout()
-                    .permitAll();
+                .and()
+                    .logout()
+                    .permitAll()
+                .and()
+                    .oauth2Login()
+                    .userInfoEndpoint() // oauth2 로그인 성공 후 가져올 때의 설정들
+                    // 소셜로그인 성공 시 후속 조치를 진행할 UserService 인터페이스 구현체 등록
+                    .userService(customOAuth2UserService); // 리소스 서버에서 사용자 정보를 가져온 상태에서 추가로 진행하고자 하는 기능 명시
+
     }
 
     @Autowired

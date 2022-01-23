@@ -14,7 +14,7 @@ import java.util.List;
 //@ToString
 //@EqualsAndHashCode
 //@RequiredArgsConstructor
-public class User {
+public class User2 {
     @Id // id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -36,7 +36,7 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id") ,
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    private List<Role> roles = new ArrayList<>();
+    private List<Role2> roles = new ArrayList<>();
 
 //    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = false) // mapped 사용해서 Board에서 manyToOne 으로 구한 user를 양방향 매핑하게 한다.
     // cascade : ALL로 설정해서 해당 유저가 삭제되면 관련 데이터도 다 삭제할 수 있도록

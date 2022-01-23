@@ -2,9 +2,7 @@ package com.board.board.controller;
 
 import com.board.board.domain.Board;
 import com.board.board.dto.Board.BoardPostDto;
-import com.board.board.dto.Board.BoardSaveDto;
 import com.board.board.mapper.Board.BoardPostMapper;
-import com.board.board.mapper.Board.BoardSaveMapper;
 import com.board.board.repository.BoardRepository;
 import com.board.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
@@ -29,15 +27,13 @@ public class BoardController {
 
     private final BoardService boardService;
 
-    private final BoardSaveMapper boardSaveMapper;
-
     private final BoardPostMapper boardPostMapper;
 
     @GetMapping("/list")
     public String list(Model model, @PageableDefault(size = 10) Pageable pageable, @RequestParam(required = false, defaultValue = "") String searchText){
 
         // List형태로 받아온 전체 board데이터를 DTO로 변환
-        List<BoardPostDto> boardPostDtos = boardPostMapper.toDtos(boardService.list(pageable, searchText));
+        List<BoardPostDto> boardPostDtos = boardPostMapper.toDtos(boardService.list(searchText));
         // DTO로 변환된 boardPostDots를 다시 Page형태로 바꾸어 준다.
         final int start = (int)pageable.getOffset();
         final int end = Math.min((start + pageable.getPageSize()), boardPostDtos.size());
@@ -56,25 +52,25 @@ public class BoardController {
     @GetMapping("/form")
     public String form(Model model, @RequestParam(required = false) Long id){
         if(id==null){
-            model.addAttribute("boardSaveDto", new BoardSaveDto());
+            model.addAttribute("boardPostDto", new BoardPostDto());
         }else{
             Board board = boardService.postForm(id);
-            BoardSaveDto boardSaveDto = boardSaveMapper.toDto(board);
-            boardSaveMapper.updateFromDto(boardSaveDto, board);             // null인 값들을 빼주기 위한 updateFromDto 적용
-            model.addAttribute("boardSaveDto", boardSaveDto);
+            BoardPostDto boardPostDto = boardPostMapper.toDto(board);
+            boardPostMapper.updateFromDto(boardPostDto, board);             // null인 값들을 빼주기 위한 updateFromDto 적용
+            model.addAttribute("boardPostDto", boardPostDto);
         }
         return "board/form";
     }
 
     // 게시판의 글을 저장하고, 에러가 있으면 이를 알려준다.
     @PostMapping("/form")
-    public String form(@Valid BoardSaveDto boardSaveDto, BindingResult bindingResult, Authentication authentication){
+    public String form(@Valid BoardPostDto boardPostDto, BindingResult bindingResult, Authentication authentication){
         if(bindingResult.hasErrors()){      // 제목이 2글자 이하이거나 30자 이상인 경우 에러를 출력한다.
             return "board/form";
         }
         String username = authentication.getName();
-        Board board = boardSaveMapper.toEntity(boardSaveDto);           // mapstruct를 사용하여 Dto의 정보를 entity로 바꾸어준다.
-        boardSaveMapper.updateFromDto(boardSaveDto, board);             // null인 값들을 빼주기 위한 updateFromDto
+        Board board = boardPostMapper.toEntity(boardPostDto);           // mapstruct를 사용하여 Dto의 정보를 entity로 바꾸어준다.
+        boardPostMapper.updateFromDto(boardPostDto, board);             // null인 값들을 빼주기 위한 updateFromDto
 
         boardService.save(username, board);  // 글 저장 save
 
