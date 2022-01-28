@@ -21,6 +21,7 @@ public class Board {
     private String title;
 
     @NotBlank
+    @Column(columnDefinition="TEXT", nullable = false)
     private String content;
 
     private String nickname;

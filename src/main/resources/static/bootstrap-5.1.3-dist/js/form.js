@@ -33,7 +33,7 @@ nhn.husky.EZCreator.createInIFrame({
 });
 
 function save(){
-    oEditors.getById["title"].exec("UPDATE_CONTENTS_FIELD", []);
+    oEditors.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
     let title = document.getElementById("title").value;
     let content = document.getElementById("content").value;
 

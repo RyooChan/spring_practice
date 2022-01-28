@@ -22,10 +22,8 @@
                     </p>
                 </div>
                 <p>내용</p>
-                <div class="form-group mb-3" >
-                    <p class="form-control" id="context">
-                        <textarea readonly class="form-control-plaintext h-25" rows="20" th:utext="*{content}">gd</textarea>
-                    </p>
+                <div class="form-group mb-3 border-dark" >
+                    <div readonly class="form-control-plaintext border" th:utext="*{content}">gd</div>
                 </div>
                 <div class="text-right" sec:authorize="( isAuthenticated() or hasRole('ROLE_ADMIN') )">
                     <a class="btn btn-primary" th:onclick="|deleteBoard(*{id})|">삭제</a>
