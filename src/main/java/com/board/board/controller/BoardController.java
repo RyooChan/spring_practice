@@ -67,8 +67,6 @@ public class BoardController {
             return "board/form";
         }
         String username = authentication.getName();
-        System.out.println(username);
-        System.out.println("------------------------------------------");
         Board board = boardPostMapper.toEntity(boardPostDto);           // mapstruct를 사용하여 Dto의 정보를 entity로 바꾸어준다.
         boardPostMapper.updateFromDto(boardPostDto, board);             // null인 값들을 빼주기 위한 updateFromDto
 
