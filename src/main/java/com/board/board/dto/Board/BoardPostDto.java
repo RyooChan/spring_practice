@@ -1,5 +1,6 @@
 package com.board.board.dto.Board;
 
+import com.board.board.domain.oauth.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,4 +18,6 @@ public class BoardPostDto {
     private String title;
     @NotBlank(message = "내용을 입력해 주세요~")
     private String content;
+
+    private User user;
 }

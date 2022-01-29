@@ -26,8 +26,8 @@ public class BoardService {
     }
 
     @Transactional
-    public void save(String username, Board board){
-        User user = userRepository.findUserByEmail(username);    // user의 정보를 작성자 정보를 통해 받아온다.
+    public void save(String userEmail, Board board){
+        User user = userRepository.findUserByEmail(userEmail);    // user의 정보를 작성자 정보를 통해 받아온다.
         board.setUser(user);                                    // entity에 user정보를 적용해준다.
         boardRepository.save(board);
     }

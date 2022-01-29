@@ -24,11 +24,6 @@ public class Board {
     @Column(columnDefinition="TEXT", nullable = false)
     private String content;
 
-    private String nickname;
-
-    // test4
-//    private long userId;
-
     @ManyToOne
     @JoinColumn(name="user_id", referencedColumnName = "id")
     @JsonIgnore

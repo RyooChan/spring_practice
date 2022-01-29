@@ -2,6 +2,7 @@ package com.board.board.controller;
 
 import com.board.board.domain.Board;
 import com.board.board.dto.Board.BoardPostDto;
+import com.board.board.dto.oauth.SessionUser;
 import com.board.board.mapper.Board.BoardPostMapper;
 import com.board.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
@@ -10,18 +11,23 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 @Controller
 @RequestMapping("/board")
 @RequiredArgsConstructor
 public class BoardController {
+    private final HttpSession httpSession;
 
     private final BoardService boardService;
 
@@ -61,16 +67,21 @@ public class BoardController {
     }
 
     // 게시판의 글을 저장하고, 에러가 있으면 이를 알려준다.
+    // 세션으로 저장된 userid를 가져오기 위해 HttpSession을 받아온다. 이후 그곳에 저장된 userEmail을 통해 저장한다.
+    // 겹치지 않는 값은 userid를 통해 유저를 검색하고, 그 유저의 id를 저장시킨다.
     @PostMapping("/form")
-    public String form(@Valid BoardPostDto boardPostDto, BindingResult bindingResult, Authentication authentication){
+    public String form(@Valid BoardPostDto boardPostDto, BindingResult bindingResult, HttpSession httpSession){
         if(bindingResult.hasErrors()){      // 제목이 2글자 이하이거나 30자 이상인 경우 에러를 출력한다.
             return "board/form";
         }
-        String username = authentication.getName();
+
+        SessionUser user = (SessionUser) httpSession.getAttribute("user");
+        String userEmail = user.getEmail();
+
         Board board = boardPostMapper.toEntity(boardPostDto);           // mapstruct를 사용하여 Dto의 정보를 entity로 바꾸어준다.
         boardPostMapper.updateFromDto(boardPostDto, board);             // null인 값들을 빼주기 위한 updateFromDto
 
-        boardService.save(username, board);  // 글 저장 save
+        boardService.save(userEmail, board);  // 글 저장 save
 
         return "redirect:/board/list";
     }
