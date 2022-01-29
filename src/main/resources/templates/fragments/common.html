@@ -21,8 +21,10 @@
             <a class="btn btn-secondary my-2 my-sm-0 mx-2" th:href="@{/account/register}" sec:authorize="isAnonymous()">회원가입</a>
             <form class="form-inline my-2 my-lg-0 align-items-end" th:action="@{/logout}" method="POST" sec:authorize="isAuthenticated()">
                 <!--            <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">-->
-                <span class="text-white mx-2" sec:authentication="name">사용자</span>
                 <span class="text-white mx-2" sec:authorize="hasRole('ROLE_ADMIN')">운영자</span>
+                <span class="text-white mx-2" sec:authorize="hasRole('ROLE_GUEST')">일반유저</span>
+                <img class="profile-main" th:width="25"  th:height="25" th:src="${session.user.getPicture()}" th:alt="프사"/>
+                <span class="text-white mx-2" th:text="${session.user.getName()}"></span>
                 <button class="btn btn-secondary my-2 my-sm-0" type="submit">Logout</button>
             </form>
             <a th:href="@{/account/withdraw}" class="btn btn-secondary mx-2 my-2 my-sm-0" sec:authorize="isAuthenticated()">탈퇴</a>
