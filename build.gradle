@@ -57,6 +57,7 @@ dependencies {
     compileOnly files('libs/library.jar')
 
     compileOnly 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
 }
 
 test {

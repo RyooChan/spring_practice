@@ -19,37 +19,54 @@
 // }
 //
 
-var oEditors = [];
-nhn.husky.EZCreator.createInIFrame({
-    oAppRef : oEditors
-    , elPlaceHolder : "content"
-    , sSkinURI : "/nse_files/SmartEditor2Skin.html"
-    , fCreator : "createSEditor2"
-    , htParams : {
-        bUseToolbar : true
-        , bUseVerticalResizer : false
-        , bUseModeChanger : false
-    }
-});
+let oEditors = [];
+
+function smartEditor(){
+    oEditors = [];
+    nhn.husky.EZCreator.createInIFrame({
+        oAppRef : oEditors
+        , elPlaceHolder : "content"
+        , sSkinURI : "/nse_files/SmartEditor2Skin.html"
+        , fCreator : "createSEditor2"
+        , htParams : {
+            bUseToolbar : true
+            , bUseVerticalResizer : false
+            , bUseModeChanger : false
+        }
+    });
+}
 
 function save(){
-    oEditors.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
-    let title = document.getElementById("title").value;
-    let content = document.getElementById("content").value;
+    if(confirm("글을 작성하시겠습니까?")){
+        oEditors.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
+        let title = document.getElementById("title").value;
+        let content = document.getElementById("content").value;
 
-    let POST = {
-        title: title
-        , content : content
-    }
-
-    $.ajax({
-        type: POST
-        , url: "/board/form"
-        , data: POST
-        , success: function(data){
-            alert("글이 저장되었습니다.")
+        let POST = {
+            title: title
+            , content : content
         }
-    })
+
+        $.ajax({
+            url: "/board/form"
+            // url: "/api/boards/form"
+            , type: 'POST'
+            , data: POST
+            , success: function(data){
+                console.log(data);
+                if(data.startsWith('<div class="container" >')){        // 아무리 해보려해도 안돼서 변경되는 부분을 찾아 하드코딩 진행함.
+                    $('#form').replaceWith(data);
+                    smartEditor();
+                }else{
+                    alert('작성 완료.');
+                    window.location.href = '/board/list';
+                }
+            }
+            , error: function (request, status, error) {
+                alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+            }
+        });
+    }
 }
 
 
@@ -65,9 +82,17 @@ function init(){
     // )
 
     // 스마트에디터 글 전송
-    document.getElementById("post").addEventListener(
-        "click", event=>save(event.target)
-    )
+    // document.getElementById("postIt").addEventListener(
+    //     "click", event=>save(event.target)
+    // )
+
+    smartEditor();
+
+    document.addEventListener('click',function(event){
+        if(event.target && event.target.id === "postIt"){
+            save(event.target);
+        }
+    });
 }
 
 init();

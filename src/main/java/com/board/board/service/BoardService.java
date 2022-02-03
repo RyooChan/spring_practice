@@ -1,8 +1,10 @@
 package com.board.board.service;
 
 import com.board.board.domain.Board;
+import com.board.board.domain.Reply;
 import com.board.board.domain.oauth.User;
 import com.board.board.repository.BoardRepository;
+import com.board.board.repository.ReplyRepository;
 import com.board.board.repository.oauth.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,8 @@ public class BoardService {
     private final BoardRepository boardRepository;
 
     private final UserRepository userRepository;
+
+    private final ReplyRepository replyRepository;
 
     public List<Board> list(String searchText){
         return boardRepository.findByTitleContainingOrContentContaining(searchText, searchText);
@@ -39,6 +43,10 @@ public class BoardService {
     @Transactional
     public Board postForm(Long id){
         return boardRepository.findById(id).orElse(null);
+    }
+
+    public List<Reply> getReply(Long boardId){
+        return replyRepository.findByBoardId(boardId);
     }
 
 //    public Board post(Long id){

@@ -14,8 +14,9 @@
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" th:replace="fragments/common :: menu"></nav>
 
 <main role="main" class="container">
-    <div class="container">
-        <form action="#" th:action="@{/board/form}" th:object="${boardPostDto}" method="post">
+    <div th:fragment="info-form" class="container" th:object="${boardPostDto}" xmlns:th="http://www.thymeleaf.org" >
+        <form id="form" name="form" th:object="${boardPostDto}">
+<!--        <form action="#" th:action="@{/board/form}" th:object="${boardPostDto}" method="post">-->
             <input type="hidden" th:field="*{id}">
             <div class="form-group mb-3 d-inline">
                 <label for="title">제목</label>
@@ -42,7 +43,7 @@
             <div class="text-right">
                 <a class="btn btn-primary" th:href="@{/board/list}">취소</a>
 <!--                <button type="submit" class="btn btn-primary">확인</button>-->
-                <button id="post" class="btn btn-primary">확인</button>
+                <a class="btn btn-primary" id="postIt">확인</a>
             </div>
         </form>
     </div>
