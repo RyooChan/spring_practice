@@ -25,6 +25,7 @@ import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/board")
@@ -87,6 +88,12 @@ public class BoardController {
 
         Board board = boardPostMapper.toEntity(boardPostDto);           // mapstruct를 사용하여 Dto의 정보를 entity로 바꾸어준다.
         boardPostMapper.updateFromDto(boardPostDto, board);             // null인 값들을 빼주기 위한 updateFromDto
+
+//        if(boardPostDto.getId() != null){   // 뭔가 값이 입력됨.
+//            if(!Objects.equals(board.getUser().getEmail(), userEmail)){
+//                return "error";
+//            }
+//        }
 
         boardService.save(userEmail, board);  // 글 저장 save
 

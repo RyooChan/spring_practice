@@ -43,7 +43,7 @@ function save(){
         let content = document.getElementById("content").value;
         let POST = [];
 
-        if(isNaN(id.value)) {
+        if(!isNaN(id.value)) {
             POST = {
                 id : id.value
                 , title: title
