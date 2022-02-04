@@ -41,10 +41,19 @@ function save(){
         oEditors.getById["content"].exec("UPDATE_CONTENTS_FIELD", []);
         let title = document.getElementById("title").value;
         let content = document.getElementById("content").value;
+        let POST = [];
 
-        let POST = {
-            title: title
-            , content : content
+        if(isNaN(id.value)) {
+            POST = {
+                id : id.value
+                , title: title
+                , content: content
+            }
+        }else{
+            POST = {
+                title: title
+                , content: content
+            }
         }
 
         $.ajax({
