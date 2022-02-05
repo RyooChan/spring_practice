@@ -3,9 +3,11 @@ package com.board.board.controller;
 import com.board.board.domain.Board;
 import com.board.board.domain.Reply;
 import com.board.board.dto.Board.BoardPostDto;
+import com.board.board.dto.like.LikeDto;
 import com.board.board.dto.oauth.SessionUser;
 import com.board.board.dto.reply.ReplyDto;
 import com.board.board.mapper.Board.BoardPostMapper;
+import com.board.board.mapper.Like.LikeMapper;
 import com.board.board.mapper.Reply.ReplyMapper;
 import com.board.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +40,8 @@ public class BoardController {
     private final BoardPostMapper boardPostMapper;
 
     private final ReplyMapper replyMapper;
+
+    private final LikeMapper likeMapper;
 
     @GetMapping("/list")
     public String list(Model model, @PageableDefault(size = 10) Pageable pageable, @RequestParam(required = false, defaultValue = "") String searchText){
@@ -82,7 +86,6 @@ public class BoardController {
             return "board/form :: info-form";
         }
 
-        System.out.println(boardPostDto.getContent());
         SessionUser user = (SessionUser) httpSession.getAttribute("user");
         String userEmail = user.getEmail();
 
@@ -162,6 +165,10 @@ public class BoardController {
             BoardPostDto boardPostDto = boardPostMapper.toDto(board);
             boardPostMapper.updateFromDto(boardPostDto, board);             // null인 값들을 빼주기 위한 updateFromDto 적용
             model.addAttribute("boardPostDto", boardPostDto);
+
+//            List<LikeDto> likeDtos = likeMapper.toDtos(boardService.getLike(id));
+////            if(likeDtos.contains())
+//            model.addAttribute("like", likeDtos);
 
             List<ReplyDto> replyDtos = replyMapper.toDtos(boardService.getReply(id));
             model.addAttribute("reply", replyDtos);

@@ -24,7 +24,5 @@ public class BoardPostDto {
 
     private User user;
 
-    public BoardPostDto() {
-
-    }
+    public BoardPostDto(){}
 }

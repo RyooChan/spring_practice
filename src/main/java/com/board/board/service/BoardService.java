@@ -1,9 +1,11 @@
 package com.board.board.service;
 
 import com.board.board.domain.Board;
+import com.board.board.domain.Like;
 import com.board.board.domain.Reply;
 import com.board.board.domain.oauth.User;
 import com.board.board.repository.BoardRepository;
+import com.board.board.repository.LikeRepository;
 import com.board.board.repository.ReplyRepository;
 import com.board.board.repository.oauth.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +27,8 @@ public class BoardService {
     private final UserRepository userRepository;
 
     private final ReplyRepository replyRepository;
+
+    private final LikeRepository likeRepository;
 
     public List<Board> list(String searchText){
         return boardRepository.findByTitleContainingOrContentContaining(searchText, searchText);
@@ -58,7 +62,11 @@ public class BoardService {
     }
 
     public List<Reply> getReply(Long boardId){
-        return replyRepository.findByBoardId(boardId);
+        return replyRepository.findAllByBoardId(boardId);
+    }
+
+    public List<Like> getLike(Long boardId){
+        return likeRepository.findAllByBoardId(boardId);
     }
 
 //    public Board post(Long id){

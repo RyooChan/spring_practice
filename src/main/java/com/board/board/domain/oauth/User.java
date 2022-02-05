@@ -1,13 +1,21 @@
 package com.board.board.domain.oauth;
 
 import com.board.board.BaseTimeEntity;
+import com.board.board.domain.Board;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.w3c.dom.stylesheets.LinkStyle;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
+@NamedEntityGraph(
+        name = "User.board",
+        attributeNodes = @NamedAttributeNode("boards")
+)
 @Getter
 @NoArgsConstructor
 public class User extends BaseTimeEntity {
@@ -28,6 +36,9 @@ public class User extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
+
+    @OneToMany(mappedBy = "user")
+    private List<Board> boards = new ArrayList<>();
 
     @Builder
     public User(Long id, String name, String email, String picture, Role role){
