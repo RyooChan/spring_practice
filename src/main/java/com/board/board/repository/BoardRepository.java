@@ -1,5 +1,6 @@
 package com.board.board.repository;
 
+import com.board.board.columnInterface.BoardList;
 import com.board.board.domain.Board;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,7 +17,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 //    Page<Board> findByTitleContainingOrContentContaining(String title, String content, Pageable pageable);
 
     // list출력 시 N+1해결을 위해 join fetch사용 -> 검색 도중 inner join으로 연결한다.
-   @Query("select e from Board e join fetch e.user")
+   @Query("select distinct e from Board e join fetch e.user")
     List<Board> findByTitleContainingOrContentContaining(String title, String content);
 
     Board findByUserId(long user_id);

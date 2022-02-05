@@ -1,5 +1,6 @@
 package com.board.board.service;
 
+import com.board.board.columnInterface.BoardList;
 import com.board.board.domain.Board;
 import com.board.board.domain.Like;
 import com.board.board.domain.Reply;
