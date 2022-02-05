@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 
 @Service
@@ -27,6 +28,17 @@ public class BoardService {
 
     public List<Board> list(String searchText){
         return boardRepository.findByTitleContainingOrContentContaining(searchText, searchText);
+    }
+
+    // 작성자 확인
+    // param : 작성글Id, 로그인 Email
+    // 작성글의 Id를 통해 관련 user의 정보를 가져온 후, 로그인한 Id와 Email이 일치하는지 검사한다.
+    // 일치하면 True, 다르면 False return
+    @Transactional
+    public boolean confirm(long boardId, String sessionEmail){
+        Board board = boardRepository.findByUserId(boardId);
+        String boardUserEmail = board.getUser().getEmail();
+        return (Objects.equals(boardUserEmail, sessionEmail));
     }
 
     @Transactional

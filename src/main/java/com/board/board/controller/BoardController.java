@@ -89,11 +89,11 @@ public class BoardController {
         Board board = boardPostMapper.toEntity(boardPostDto);           // mapstruct를 사용하여 Dto의 정보를 entity로 바꾸어준다.
         boardPostMapper.updateFromDto(boardPostDto, board);             // null인 값들을 빼주기 위한 updateFromDto
 
-//        if(boardPostDto.getId() != null){   // 뭔가 값이 입력됨.
-//            if(!Objects.equals(board.getUser().getEmail(), userEmail)){
-//                return "error";
-//            }
-//        }
+        if(boardPostDto.getId() != null){   // 수정 글 로직. N+1문제 있음.
+            if(!boardService.confirm(boardPostDto.getId(), user.getEmail())){
+                return "error";
+            }
+        }
 
         boardService.save(userEmail, board);  // 글 저장 save
 
