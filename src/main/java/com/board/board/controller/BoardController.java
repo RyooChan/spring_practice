@@ -2,10 +2,12 @@ package com.board.board.controller;
 
 import com.board.board.domain.Board;
 import com.board.board.domain.Reply;
+import com.board.board.dto.Board.BoardListDto;
 import com.board.board.dto.Board.BoardPostDto;
 import com.board.board.dto.like.LikeDto;
 import com.board.board.dto.oauth.SessionUser;
 import com.board.board.dto.reply.ReplyDto;
+import com.board.board.mapper.Board.BoardListMapper;
 import com.board.board.mapper.Board.BoardPostMapper;
 import com.board.board.mapper.Like.LikeMapper;
 import com.board.board.mapper.Reply.ReplyMapper;
@@ -43,15 +45,19 @@ public class BoardController {
 
     private final LikeMapper likeMapper;
 
+    private final BoardListMapper boardListMapper;
     @GetMapping("/list")
     public String list(Model model, @PageableDefault(size = 10) Pageable pageable, @RequestParam(required = false, defaultValue = "") String searchText){
 
         // List형태로 받아온 전체 board데이터를 DTO로 변환
-        List<BoardPostDto> boardPostDtos = boardPostMapper.toDtos(boardService.list(searchText));
+//        List<BoardPostDto> boardPostDtos = boardPostMapper.toDtos(boardService.list(searchText));
+        List<Board> find = boardService.list(searchText);
+        List<BoardListDto> boardPostDtos = boardListMapper.toDtos(boardService.list(searchText));
         // DTO로 변환된 boardPostDots를 다시 Page형태로 바꾸어 준다.
         final int start = (int)pageable.getOffset();
         final int end = Math.min((start + pageable.getPageSize()), boardPostDtos.size());
-        final Page<BoardPostDto> boards = new PageImpl<>(boardPostDtos.subList(start, end), pageable, boardPostDtos.size());
+//        final Page<BoardPostDto> boards = new PageImpl<>(boardPostDtos.subList(start, end), pageable, boardPostDtos.size());
+        final Page<BoardListDto> boards = new PageImpl<>(boardPostDtos.subList(start, end), pageable, boardPostDtos.size());
 
         // 구해진 page형태의 boards를 사용하여 시작 ~ 끝 페이지를 구할 수 있도록 한다.
         int startPage = Math.max(1, boards.getPageable().getPageNumber() - 4);

@@ -1,6 +1,5 @@
 package com.board.board.service;
 
-import com.board.board.columnInterface.BoardList;
 import com.board.board.domain.Board;
 import com.board.board.domain.Like;
 import com.board.board.domain.Reply;
@@ -31,7 +30,9 @@ public class BoardService {
 
     private final LikeRepository likeRepository;
 
+//    public List<Board> list(String searchText){
     public List<Board> list(String searchText){
+//        return boardRepository.findByTitleContainingOrContentContaining(searchText, searchText);
         return boardRepository.findByTitleContainingOrContentContaining(searchText, searchText);
     }
 
