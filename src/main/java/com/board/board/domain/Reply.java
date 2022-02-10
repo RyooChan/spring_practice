@@ -12,11 +12,11 @@ import javax.validation.constraints.NotBlank;
 public class Reply {
     @Id // id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id;
+    private long id;
 
     @NotBlank
     @Lob
-    String content;
+    private String content;
 
     @ManyToOne
     @JoinColumn(name="user_id", referencedColumnName = "id")

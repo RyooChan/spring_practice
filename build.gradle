@@ -60,6 +60,11 @@ dependencies {
     compileOnly 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
     implementation group: 'org.bgee.log4jdbc-log4j2', name:'log4jdbc-log4j2-jdbc4.1', version: '1.16'
+
+
+    compileOnly group: 'io.jsonwebtoken', name:'jjwt-api', version: '0.11.2'
+    runtimeOnly group: 'io.jsonwebtoken', name:'jjwt-impl', version: '0.11.2'
+    runtimeOnly group: 'io.jsonwebtoken', name:'jjwt-jackson', version: '0.11.2'
 }
 
 test {

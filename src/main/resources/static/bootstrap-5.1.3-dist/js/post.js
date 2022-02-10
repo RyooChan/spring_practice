@@ -32,21 +32,31 @@ function deleteBoard(id){
 // // }
 function like(id){
     $.ajax({
-        url: 'api/boards/like' + id
+        url: '/board/heart/' + id
         , type: 'POST'
+        , dataType: 'JSON'
         , success: function (result) {
-            window.location.href = '/board/post'+id;
+            $('#heartCnt').replaceWith(result.heartCount);
+            if(result.heartUser){
+                $('#heart').replaceWith('❤');
+            }else{
+                $('#heart').replaceWith('🤍');
+            }
         }
         , error: function (request, status, error) {
             alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
         }
     });
 }
+
 function init(){
     // 글 삭제
     document.getElementById("post").addEventListener(
         "click", event=>deleteBoard(event.target)
     )
 
-
+    // 좋아요 정보 받아오기
+    like(id.value);
 }
+
+init();

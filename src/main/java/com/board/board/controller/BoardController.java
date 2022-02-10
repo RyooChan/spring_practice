@@ -1,15 +1,15 @@
 package com.board.board.controller;
 
 import com.board.board.domain.Board;
-import com.board.board.domain.Reply;
+import com.board.board.domain.Heart;
 import com.board.board.dto.Board.BoardListDto;
 import com.board.board.dto.Board.BoardPostDto;
-import com.board.board.dto.like.LikeDto;
+import com.board.board.dto.Heart.HeartDto;
 import com.board.board.dto.oauth.SessionUser;
 import com.board.board.dto.reply.ReplyDto;
 import com.board.board.mapper.Board.BoardListMapper;
 import com.board.board.mapper.Board.BoardPostMapper;
-import com.board.board.mapper.Like.LikeMapper;
+import com.board.board.mapper.Heart.HeartMapper;
 import com.board.board.mapper.Reply.ReplyMapper;
 import com.board.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
@@ -23,13 +23,11 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Objects;
 
 @Controller
 @RequestMapping("/board")
@@ -43,7 +41,7 @@ public class BoardController {
 
     private final ReplyMapper replyMapper;
 
-    private final LikeMapper likeMapper;
+    private final HeartMapper heartMapper;
 
     private final BoardListMapper boardListMapper;
     @GetMapping("/list")
@@ -76,7 +74,6 @@ public class BoardController {
         }else{
             Board board = boardService.postForm(id);
             BoardPostDto boardPostDto = boardPostMapper.toDto(board);
-            boardPostMapper.updateFromDto(boardPostDto, board);             // null인 값들을 빼주기 위한 updateFromDto 적용
             model.addAttribute("boardPostDto", boardPostDto);
         }
         return "board/form";
@@ -98,7 +95,7 @@ public class BoardController {
         Board board = boardPostMapper.toEntity(boardPostDto);           // mapstruct를 사용하여 Dto의 정보를 entity로 바꾸어준다.
         boardPostMapper.updateFromDto(boardPostDto, board);             // null인 값들을 빼주기 위한 updateFromDto
 
-        if(boardPostDto.getId() != null){   // 수정 글 로직. N+1문제 있음.
+        if(boardPostDto.getId() != null){   // 수정 글 로직.
             if(!boardService.confirm(boardPostDto.getId(), user.getEmail())){
                 return "error";
             }
@@ -172,13 +169,51 @@ public class BoardController {
             boardPostMapper.updateFromDto(boardPostDto, board);             // null인 값들을 빼주기 위한 updateFromDto 적용
             model.addAttribute("boardPostDto", boardPostDto);
 
-//            List<LikeDto> likeDtos = likeMapper.toDtos(boardService.getLike(id));
-////            if(likeDtos.contains())
-//            model.addAttribute("like", likeDtos);
-
             List<ReplyDto> replyDtos = replyMapper.toDtos(boardService.getReply(id));
             model.addAttribute("reply", replyDtos);
         }
         return "board/post";
     }
+
+
+
+//     좋아요 보여주기
+    @PostMapping("/heart/{id}")
+    public ModelAndView heart(ModelMap model, @PathVariable Long id) throws Exception{
+
+        ModelAndView modelAndView = new ModelAndView();
+        MappingJackson2JsonView jsonView = new MappingJackson2JsonView();
+        modelAndView.setView(jsonView);
+
+        SessionUser user = (SessionUser) httpSession.getAttribute("user");
+        long userId = user.getId();
+
+        Long wholeHeart = boardService.getHeartCount(id);
+        HeartDto heartDto = heartMapper.toDto(boardService.getMyHeart(id, userId));
+
+        boolean myHeart = heartDto != null;     // heartDto가 있으면 true, 없으면 false
+
+        model.addAttribute("heartCount", wholeHeart);
+        model.addAttribute("heartUser", myHeart);
+        return modelAndView;
+    }
+
+
+    // 좋아요/해제
+//    @GetMapping("/form")
+//    public String disLike(Model model, @RequestParam(required = false) Long id){
+//        SessionUser user = (SessionUser) httpSession.getAttribute("user");
+//        long userId = user.getId();
+//
+//        long likeId = boardService.getMyLike(id, userId);
+//
+//        if(likeId>0){
+////            boardService.
+//        }else{
+//            LikeDto likeDto = new LikeDto();
+//            likeDto.setBoardId(id);
+//            likeDto.setUserId(userId);
+//        }
+//        return "board/form";
+//    }
 }

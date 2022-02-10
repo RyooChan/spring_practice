@@ -2,6 +2,8 @@ package com.board.board.domain.oauth;
 
 import com.board.board.BaseTimeEntity;
 import com.board.board.domain.Board;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,6 +20,7 @@ import java.util.List;
 )
 @Getter
 @NoArgsConstructor
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)        // board와의 양방향 매핑에서의 무한 reculsion해결을 위해
 public class User extends BaseTimeEntity {
 
     @Id

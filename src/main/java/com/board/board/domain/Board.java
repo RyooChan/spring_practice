@@ -1,6 +1,8 @@
 package com.board.board.domain;
 
 import com.board.board.domain.oauth.User;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
@@ -10,6 +12,7 @@ import javax.validation.constraints.Size;
 
 @Entity // DB와의 연결을 위하여
 @Data   // getter setter
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 public class Board {
     @Id // id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,6 +28,6 @@ public class Board {
     private String content;
 
     @ManyToOne
-    @JoinColumn(name="userId", referencedColumnName = "id")
+    @JoinColumn(name="user_id", referencedColumnName = "id")
     private User user;
 }

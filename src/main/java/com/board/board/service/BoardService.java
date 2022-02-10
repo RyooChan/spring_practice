@@ -1,11 +1,11 @@
 package com.board.board.service;
 
 import com.board.board.domain.Board;
-import com.board.board.domain.Like;
+import com.board.board.domain.Heart;
 import com.board.board.domain.Reply;
 import com.board.board.domain.oauth.User;
 import com.board.board.repository.BoardRepository;
-import com.board.board.repository.LikeRepository;
+import com.board.board.repository.HeartRepository;
 import com.board.board.repository.ReplyRepository;
 import com.board.board.repository.oauth.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +28,7 @@ public class BoardService {
 
     private final ReplyRepository replyRepository;
 
-    private final LikeRepository likeRepository;
+    private final HeartRepository heartRepository;
 
 //    public List<Board> list(String searchText){
     public List<Board> list(String searchText){
@@ -67,8 +67,30 @@ public class BoardService {
         return replyRepository.findAllByBoardId(boardId);
     }
 
-    public List<Like> getLike(Long boardId){
-        return likeRepository.findAllByBoardId(boardId);
+    public List<Heart> getLikeAll(Long boardId){
+        return heartRepository.findAllByBoardId(boardId);
+    }
+
+    public Long getHeartCount(Long boardId){
+        return heartRepository.countByBoardId(boardId);
+    }
+
+    // 나의 좋아요 여부, 내가 한 좋아요 Id를 가져온다.
+    // 내가 좋아요 한 정보를 모두 가져온다. 이는 나중에
+    public Heart getMyHeart(Long boardId, Long userId){
+        return heartRepository.findByBoardIdAndUserId(boardId, userId);
+    }
+
+    // 좋아요 저장하기.
+    // 좋아요 정보 : boardId, userId를 받아 저장한다.
+    public void saveHeart(Heart heart){
+        heartRepository.save(heart);
+    }
+
+    // 좋아요 지우기
+    // 좋아요 id를 받아와 이를 삭제한다.
+    public void deleteHeart(long id){
+        heartRepository.deleteById(id);
     }
 
 //    public Board post(Long id){

@@ -8,18 +8,16 @@ import javax.persistence.*;
 
 @Entity // DB와의 연결을 위하여
 @Data   // getter setter
-public class Like {
+public class Heart {
     @Id // id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name="user_id", referencedColumnName = "id")
-    @JsonIgnore
-    private User user;  // 좋아요 누른 user
+    @JoinColumn(name="userId", referencedColumnName = "id")
+    private User user;
 
     @ManyToOne
-    @JoinColumn(name="board_id", referencedColumnName = "id")
-    @JsonIgnore
-    private Board board;    // 해당 글
+    @JoinColumn(name="boardId", referencedColumnName = "id")
+    private Board board;
 }

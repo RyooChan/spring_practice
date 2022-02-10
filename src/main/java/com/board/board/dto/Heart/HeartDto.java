@@ -1,18 +1,16 @@
-package com.board.board.dto.like;
+package com.board.board.dto.Heart;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotBlank;
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class LikeDto {
+public class HeartDto {
     long id;
 
-    long user_id;
+    long userId;
 
-    long board_id;
+    long boardId;
 }
