@@ -30,17 +30,17 @@ function deleteBoard(id){
 // //         });
 // //     }
 // // }
-function like(id){
+function heartOut(id){
     $.ajax({
         url: '/board/heart/' + id
         , type: 'POST'
         , dataType: 'JSON'
         , success: function (result) {
-            $('#heartCnt').replaceWith(result.heartCount);
+            $('#heartCnt').text(result.heartCount);
             if(result.heartUser){
-                $('#heart').replaceWith('❤');
+                $('#heart').text('❤');
             }else{
-                $('#heart').replaceWith('🤍');
+                $('#heart').text('🤍');
             }
         }
         , error: function (request, status, error) {
@@ -49,14 +49,33 @@ function like(id){
     });
 }
 
+function doHeart(id){
+    $.ajax({
+        url: '/api/doHeart/' + id
+        // url: '/board/doHeart/' + id
+        , type: 'POST'
+        // , dataType: 'JSON'
+        , success: function (result) {
+            heartOut(id);
+        }
+        , error: function (request, status, error) {
+            alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+        }
+    });
+}
 function init(){
     // 글 삭제
     document.getElementById("post").addEventListener(
         "click", event=>deleteBoard(event.target)
     )
 
+    // 좋아요 / 좋아요 취소
+    document.getElementById("heart").addEventListener(
+        "click", event=>doHeart(id.value)
+    )
+
     // 좋아요 정보 받아오기
-    like(id.value);
+    heartOut(id.value);
 }
 
 init();

@@ -14,4 +14,9 @@ public interface HeartMapper extends EntityMapper<HeartDto, Heart>  {
     @Mapping(target = "userId", source = "user.id")
     @Mapping(target = "boardId", source = "board.id")
     HeartDto toDto(Heart heart);
+
+    @Override
+    @Mapping(source = "userId", target = "user.id")
+    @Mapping(source = "boardId",target = "board.id")
+    Heart toEntity(HeartDto heartDto);
 }

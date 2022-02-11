@@ -200,20 +200,28 @@ public class BoardController {
 
 
     // 좋아요/해제
-//    @GetMapping("/form")
-//    public String disLike(Model model, @RequestParam(required = false) Long id){
-//        SessionUser user = (SessionUser) httpSession.getAttribute("user");
-//        long userId = user.getId();
-//
-//        long likeId = boardService.getMyLike(id, userId);
-//
-//        if(likeId>0){
-////            boardService.
-//        }else{
-//            LikeDto likeDto = new LikeDto();
-//            likeDto.setBoardId(id);
-//            likeDto.setUserId(userId);
-//        }
-//        return "board/form";
-//    }
+    @PostMapping("/doHeart/{id}")
+    public void doHeart(@PathVariable Long id){
+        SessionUser user = (SessionUser) httpSession.getAttribute("user");
+        long userId = user.getId();
+
+        // 현재 로그인한 아이디와, board의 Id를 바탕으로 좋아요가 되어있나 확인한다.
+        Long wholeHeart = boardService.getHeartCount(id);
+        HeartDto heartDto = heartMapper.toDto(boardService.getMyHeart(id, userId));
+        boolean myHeart = heartDto != null;     // heartDto가 있으면 true, 없으면 false
+
+        // 좋아요가 되어 있다면 취소해줄 예정이다.
+        if(myHeart){
+            boardService.deleteHeart(heartDto.getId());
+        }else{
+            heartDto = new HeartDto();
+            heartDto.setBoardId(id);
+            heartDto.setUserId(userId);
+            Heart heart = heartMapper.toEntity(heartDto);
+            heartMapper.updateFromDto(heartDto, heart);             // null인 값들을 빼주기 위한 updateFromDto 적용
+            boardService.saveHeart(heart);
+        }
+
+//        return "board/post"+id;
+    }
 }

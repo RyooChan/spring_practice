@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.board.board.domain.Board;
+import com.board.board.domain.Heart;
 import com.board.board.dto.Board.BoardPostDto;
+import com.board.board.dto.Heart.HeartDto;
 import com.board.board.dto.oauth.SessionUser;
 import com.board.board.mapper.Board.BoardPostMapper;
+import com.board.board.mapper.Heart.HeartMapper;
 import com.board.board.mapper.Reply.ReplyMapper;
 import com.board.board.repository.BoardRepository;
 import com.board.board.service.BoardApiService;
@@ -27,6 +30,7 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/api")
 class BoardApiController {
+    private final HttpSession httpSession;
 
     private final BoardRepository boardRepository;
 
@@ -38,13 +42,17 @@ class BoardApiController {
 
     private final ReplyMapper replyMapper;
 
+    private final HeartMapper heartMapper;
+
     @Autowired
-    public BoardApiController(BoardRepository boardRepository, BoardApiService boardApiService, BoardService boardService, BoardPostMapper boardPostMapper, ReplyMapper replyMapper) {
+    public BoardApiController(HttpSession httpSession, BoardRepository boardRepository, BoardApiService boardApiService, BoardService boardService, BoardPostMapper boardPostMapper, ReplyMapper replyMapper, HeartMapper heartMapper) {
+        this.httpSession = httpSession;
         this.boardRepository = boardRepository;
         this.boardApiService = boardApiService;
         this.boardService = boardService;
         this.boardPostMapper = boardPostMapper;
         this.replyMapper = replyMapper;
+        this.heartMapper = heartMapper;
     }
 
     @GetMapping("/boards")
@@ -109,5 +117,35 @@ class BoardApiController {
     void deleteBoard(@PathVariable Long id) {
         boardRepository.deleteById(id);
     }
+
+
+    // 좋아요/해제
+    @PostMapping("/doHeart/{id}")
+    public void doHeart(@PathVariable Long id){
+        SessionUser user = (SessionUser) httpSession.getAttribute("user");
+        long userId = user.getId();
+
+        // 현재 로그인한 아이디와, board의 Id를 바탕으로 좋아요가 되어있나 확인한다.
+        Long wholeHeart = boardService.getHeartCount(id);
+        HeartDto heartDto = heartMapper.toDto(boardService.getMyHeart(id, userId));
+        boolean myHeart = heartDto != null;     // heartDto가 있으면 true, 없으면 false
+
+        // 좋아요가 되어 있다면 취소해줄 예정이다.
+        if(myHeart){
+            boardService.deleteHeart(heartDto.getId());
+        }else{
+            heartDto = new HeartDto();
+            heartDto.setBoardId(id);
+            heartDto.setUserId(userId);
+            System.out.println(heartDto);
+            Heart heart = heartMapper.toEntity(heartDto);
+            System.out.println(heart);
+            heartMapper.updateFromDto(heartDto, heart);             // null인 값들을 빼주기 위한 updateFromDto 적용
+            boardService.saveHeart(heart);
+        }
+
+//        return "board/post"+id;
+    }
+
 
 }
