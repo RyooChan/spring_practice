@@ -1,8 +1,6 @@
 package com.board.board.controller;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.board.board.domain.Board;
 import com.board.board.domain.Heart;
@@ -10,20 +8,18 @@ import com.board.board.domain.Reply;
 import com.board.board.dto.Board.BoardPostDto;
 import com.board.board.dto.Heart.HeartDto;
 import com.board.board.dto.oauth.SessionUser;
-import com.board.board.dto.reply.ReplyDto;
+import com.board.board.dto.reply.ReplyPostDto;
+import com.board.board.dto.reply.ReplySaveDto;
 import com.board.board.mapper.Board.BoardPostMapper;
 import com.board.board.mapper.Heart.HeartMapper;
-import com.board.board.mapper.Reply.ReplyMapper;
+import com.board.board.mapper.Reply.ReplyPostMapper;
+import com.board.board.mapper.Reply.ReplySaveMapper;
 import com.board.board.repository.BoardRepository;
 import com.board.board.service.BoardApiService;
 import com.board.board.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,8 +29,6 @@ import javax.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 @RestController
 @RequestMapping("/api")
@@ -49,18 +43,21 @@ class BoardApiController {
 
     private final BoardPostMapper boardPostMapper;
 
-    private final ReplyMapper replyMapper;
+    private final ReplySaveMapper replySaveMapper;
+
+    private final ReplyPostMapper replyPostMapper;
 
     private final HeartMapper heartMapper;
 
     @Autowired
-    public BoardApiController(HttpSession httpSession, BoardRepository boardRepository, BoardApiService boardApiService, BoardService boardService, BoardPostMapper boardPostMapper, ReplyMapper replyMapper, HeartMapper heartMapper) {
+    public BoardApiController(HttpSession httpSession, BoardRepository boardRepository, BoardApiService boardApiService, BoardService boardService, BoardPostMapper boardPostMapper, ReplySaveMapper replySaveMapper, ReplyPostMapper replyPostMapper, HeartMapper heartMapper) {
         this.httpSession = httpSession;
         this.boardRepository = boardRepository;
         this.boardApiService = boardApiService;
         this.boardService = boardService;
         this.boardPostMapper = boardPostMapper;
-        this.replyMapper = replyMapper;
+        this.replySaveMapper = replySaveMapper;
+        this.replyPostMapper = replyPostMapper;
         this.heartMapper = heartMapper;
     }
 
@@ -156,7 +153,7 @@ class BoardApiController {
 
     //     댓글 쓰기
     @PostMapping("/doReply/{boardId}")
-    public String doReply(@Valid ReplyDto replyDto, BindingResult bindingResult, HttpSession httpSession) throws Exception{
+    public String doReply(@Valid ReplySaveDto replySaveDto, BindingResult bindingResult, HttpSession httpSession) throws Exception{
 
         if(bindingResult.hasErrors()) {      // 제목이 2글자 이하이거나 30자 이상인 경우 에러를 출력한다.
             StringBuilder errorMsg = new StringBuilder();
@@ -168,14 +165,19 @@ class BoardApiController {
             return errorMsg.toString();
         }
 
+        System.out.println("------------------");
+        System.out.println(replySaveDto);
+
         SessionUser user = (SessionUser) httpSession.getAttribute("user");
         long userId = user.getId();
 
-        Reply reply = replyMapper.toEntity(replyDto);
-        replyMapper.updateFromDto(replyDto, reply);
+        Reply reply = replySaveMapper.toEntity(replySaveDto);
+        replySaveMapper.updateFromDto(replySaveDto, reply);
 
-        if(replyDto.getId() > 0){       // 댓글 수정시
-            if(!boardService.confirmReply(replyDto.getId(), userId)){   // 본인확인 logic
+        System.out.println(reply);
+
+        if(replySaveDto.getId() > 0){       // 댓글 수정시
+            if(!boardService.confirmReply(replySaveDto.getId(), userId)){   // 본인확인 logic
                 return "Nope.";
             }
         }
@@ -185,25 +187,10 @@ class BoardApiController {
     }
 
     //     댓글 보여주기
-    @PostMapping("/reply/{id}")
-    public ModelAndView reply(ModelMap model, @PathVariable Long id) throws Exception{
-
-        ModelAndView modelAndView = new ModelAndView();
-        MappingJackson2JsonView jsonView = new MappingJackson2JsonView();
-        modelAndView.setView(jsonView);
-
-        SessionUser user = (SessionUser) httpSession.getAttribute("user");
-        long userId = user.getId();
-
-        Long wholeHeart = boardService.getHeartCount(id);
-        HeartDto heartDto = heartMapper.toDto(boardService.getMyHeart(id, userId));
-
-        boolean myHeart = heartDto != null;     // heartDto가 있으면 true, 없으면 false
-
-        model.addAttribute("heartCount", wholeHeart);
-        model.addAttribute("heartUser", myHeart);
-        return modelAndView;
+    @GetMapping("/outReply/{id}")
+    public List<ReplyPostDto> reply(@PathVariable Long id) throws Exception{
+        List<ReplyPostDto> replyPostDto = replyPostMapper.toDtos(boardService.outReply(id));
+        return replyPostDto;
     }
-
 
 }

@@ -117,4 +117,8 @@ public class BoardService {
         reply.setUser(user);                                    // entity에 user정보를 적용해준다.
         return replyRepository.save(reply);
     }
+
+    public List<Reply> outReply(long boardId){
+        return replyRepository.findAllByBoardId(boardId);
+    }
 }

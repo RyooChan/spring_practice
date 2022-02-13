@@ -41,14 +41,9 @@
         </div>
 
 <!--    댓글 -->
-        <table class="table">
-            <tbody>
-            <tr th:each="reply : ${reply}">
-                <td th:text="${reply.id}">Mark</td>
-                <td th:text="${reply.replyContent}">Mark</td>
-            </tr>
-            </tbody>
-        </table>
+        <div class="container" id="reply-out">
+        </div>
+
         <div th:fragment="info-reply">
             <label for="replyContent">댓글내용</label>
             <textarea class="form-control" id="replyContent" rows="3" ></textarea>

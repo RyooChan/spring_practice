@@ -66,12 +66,30 @@ function doHeart(id){
 
 function replyOut(id){
     $.ajax({
-        url: '/board/reply/' + id
+        url: '/api/outReply/' + id
         // url: '/board/doHeart/' + id
         , type: 'GET'
-        // , dataType: 'JSON'
+        , dataType: 'JSON'
         , success: function (result) {
-            heartOut(id);
+            $('#reply-out *').remove();
+
+            let replyTable = document.createElement("table");
+            replyTable.className = "table table-bordered";
+
+            for(var i=0; i<result.length; i++){
+                var tr = document.createElement("tr");
+                var replyId = document.createElement("td");
+                var replyUserName = document.createElement("td");
+                var replyContent = document.createElement("td");
+                replyUserName.innerText = (result[i].userName);
+                replyContent.innerText = (result[i].replyContent);
+                tr.Id = result[i].id;
+                tr.append(replyUserName);
+                tr.append(replyContent);
+                replyTable.append(tr);
+            }
+            $('#reply-out').append(replyTable);
+            console.log(result);
         }
         , error: function (request, status, error) {
             alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
@@ -96,7 +114,8 @@ function doReply(id){
         // , dataType: 'JSON'
         , success: function (result) {
             if(result === "success"){
-                alert("성공");
+                $('#replyContent').text();
+                replyOut(id);
             }else{
                 $('#reply-error').text(result);
             }
@@ -119,6 +138,9 @@ function init(){
 
     // 좋아요 정보 받아오기
     heartOut(id.value);
+
+    // 댓글 받아오기
+    replyOut(id.value);
 
     // 댓글 작성하기
     document.getElementById("post").addEventListener(

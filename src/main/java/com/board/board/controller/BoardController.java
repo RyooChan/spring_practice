@@ -1,17 +1,15 @@
 package com.board.board.controller;
 
 import com.board.board.domain.Board;
-import com.board.board.domain.Heart;
-import com.board.board.domain.Reply;
 import com.board.board.dto.Board.BoardListDto;
 import com.board.board.dto.Board.BoardPostDto;
 import com.board.board.dto.Heart.HeartDto;
 import com.board.board.dto.oauth.SessionUser;
-import com.board.board.dto.reply.ReplyDto;
+import com.board.board.dto.reply.ReplySaveDto;
 import com.board.board.mapper.Board.BoardListMapper;
 import com.board.board.mapper.Board.BoardPostMapper;
 import com.board.board.mapper.Heart.HeartMapper;
-import com.board.board.mapper.Reply.ReplyMapper;
+import com.board.board.mapper.Reply.ReplySaveMapper;
 import com.board.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -40,7 +38,7 @@ public class BoardController {
 
     private final BoardPostMapper boardPostMapper;
 
-    private final ReplyMapper replyMapper;
+    private final ReplySaveMapper replyMapper;
 
     private final HeartMapper heartMapper;
 
@@ -170,8 +168,8 @@ public class BoardController {
             boardPostMapper.updateFromDto(boardPostDto, board);             // null인 값들을 빼주기 위한 updateFromDto 적용
             model.addAttribute("boardPostDto", boardPostDto);
 
-            List<ReplyDto> replyDtos = replyMapper.toDtos(boardService.getReply(id));
-            model.addAttribute("reply", replyDtos);
+//            List<ReplySaveDto> replySaveDtos = replyMapper.toDtos(boardService.getReply(id));
+//            model.addAttribute("reply", replySaveDtos);
         }
         return "board/post";
     }
