@@ -93,9 +93,28 @@ public class BoardService {
         heartRepository.deleteById(id);
     }
 
-//    public Board post(Long id){
-//        Board board = boardRepository.findById(id).orElse(null);
-//
-//        return 1;
-//    }
+    public void deleteBoard(long id){
+        boardRepository.deleteById(id);
+    }
+
+    // 댓글 작성자 확인
+    // param : 작성글Id, 로그인 id
+    // 작성글의 Id를 통해 관련 user의 정보를 가져온 후, 로그인한 Id와 id가 일치하는지 검사한다.
+    // 일치하면 True, 다르면 False return
+    @Transactional
+    public boolean confirmReply(long boardId, long sessionId){
+        Reply reply = replyRepository.findByBoardId(boardId);
+        long replyUserId = reply.getUser().getId();
+        return ( replyUserId == sessionId );
+    }
+
+    // 댓글 저장
+    // param : 작성자 id, 댓글 내용
+    // 작성자를 찾아서 댓글을 등록함.
+    @Transactional
+    public Reply saveReply(long userId, Reply reply){
+        User user = userRepository.findUserById(userId);    // user의 정보를 작성자 정보를 통해 받아온다.
+        reply.setUser(user);                                    // entity에 user정보를 적용해준다.
+        return replyRepository.save(reply);
+    }
 }

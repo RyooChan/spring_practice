@@ -28,7 +28,8 @@
             </div>
 <!--            글 수정/삭제-->
             <div class="text-right" th:if="${session.user.getEmail()} == ${boardPostDto.user.email}">
-                <a class="btn btn-primary" th:onclick="|deleteBoard(*{id})|">삭제</a>
+                <a class="btn btn-primary" id="delete" >삭제</a>
+<!--                <a class="btn btn-primary" id="delete" th:onclick="|deleteBoard(*{id})|">삭제</a>-->
                 <a type="button" class="btn btn-primary" th:href="@{/board/form(id=${boardPostDto.id})}">수정</a>
             </div>
         </form>
@@ -44,12 +45,14 @@
             <tbody>
             <tr th:each="reply : ${reply}">
                 <td th:text="${reply.id}">Mark</td>
-                <td th:text="${reply.content}">Mark</td>
+                <td th:text="${reply.replyContent}">Mark</td>
             </tr>
             </tbody>
         </table>
-        <div>
-            <textarea class="form-control" id="reply_content" rows="3"></textarea>
+        <div th:fragment="info-reply">
+            <label for="replyContent">댓글내용</label>
+            <textarea class="form-control" id="replyContent" rows="3" ></textarea>
+            <div class="text-warning" id="reply-error"></div>
             <button id="post" class="btn btn-primary">댓글 작성하기</button>
         </div>
     </div>

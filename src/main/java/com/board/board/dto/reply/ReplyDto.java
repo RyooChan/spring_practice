@@ -6,9 +6,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,8 +19,11 @@ public class ReplyDto {
     long id;
 
     @NotBlank
-//    @Lob
-    String content;
+    @Lob
+    @Size(min = 10, max = 500)
+    String replyContent;
 
-    long user_id;
+    long userId;
+
+    long boardId;
 }

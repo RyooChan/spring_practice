@@ -63,9 +63,52 @@ function doHeart(id){
         }
     });
 }
+
+function replyOut(id){
+    $.ajax({
+        url: '/board/reply/' + id
+        // url: '/board/doHeart/' + id
+        , type: 'GET'
+        // , dataType: 'JSON'
+        , success: function (result) {
+            heartOut(id);
+        }
+        , error: function (request, status, error) {
+            alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+        }
+    });
+}
+
+function doReply(id){
+    let replyContent = document.getElementById("replyContent").value;
+    let POST = [];
+
+    POST = {
+        replyContent : replyContent
+    }
+
+    $.ajax({
+        // url: '/board/doReply/' + id
+        url: '/api/doReply/' + id
+        // url: '/board/doHeart/' + id
+        , type: 'POST'
+        , data: POST
+        // , dataType: 'JSON'
+        , success: function (result) {
+            if(result === "success"){
+                alert("성공");
+            }else{
+                $('#reply-error').text(result);
+            }
+        }
+        , error: function (request, status, error) {
+            alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+        }
+    });
+}
 function init(){
     // 글 삭제
-    document.getElementById("post").addEventListener(
+    document.getElementById("delete").addEventListener(
         "click", event=>deleteBoard(event.target)
     )
 
@@ -76,6 +119,11 @@ function init(){
 
     // 좋아요 정보 받아오기
     heartOut(id.value);
+
+    // 댓글 작성하기
+    document.getElementById("post").addEventListener(
+        "click", event=>doReply(id.value)
+    )
 }
 
 init();
