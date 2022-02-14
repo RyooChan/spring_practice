@@ -126,10 +126,6 @@ function doReply(id){
     });
 }
 function init(){
-    // 글 삭제
-    document.getElementById("delete").addEventListener(
-        "click", event=>deleteBoard(event.target)
-    )
 
     // 좋아요 / 좋아요 취소
     document.getElementById("heart").addEventListener(
