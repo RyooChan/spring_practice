@@ -6,7 +6,6 @@ function deleteBoard(id){
             url: '/api/boards/' + id
             , type: 'DELETE'
             , success: function (result) {
-                console.log('result', result);
                 alert('삭제됨.');
                 window.location.href = '/board/list';
             }
@@ -56,7 +55,7 @@ function replyEditor(reply){
 
     var replyEditButton = document.createElement("a");
 
-    // reply.getElementsByClassName("reply-edit")[0].remove();
+    reply.getElementsByClassName("reply-edit")[0].innerText = "";
 
     replyEditButton.innerText = "변경완료";
     replyEditButton.href = "javascript:;";
@@ -172,7 +171,6 @@ function replyOut(id){
                 replyTable.append(tr);
             }
             $('#reply-out').append(replyTable);
-            console.log(result);
         }
         , error: function (request, status, error) {
             alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
@@ -197,7 +195,7 @@ function doReply(id){
         // , dataType: 'JSON'
         , success: function (result) {
             if(result === "success"){
-                $('#replyContent').text("");
+                document.getElementById("replyContent").value='';
                 heartOut(id);
                 replyOut(id);
             }else{
