@@ -16,22 +16,7 @@ function deleteBoard(id){
         });
     }
 }
-// function replySave(content){
-// //     if(confirm("작성하시겠습니까?")){
-// //         $.ajax({
-// //             url: '/api/boards/' + id
-// //             , type: 'DELETE'
-// //             , success: function (result) {
-// //                 console.log('result', result);
-// //                 alert('삭제됨.');
-// //                 window.location.href = '/board/list';
-// //             }
-// //             , error: function (request, status, error) {
-// //                 alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
-// //             }
-// //         });
-// //     }
-// // }
+
 function heartOut(id){
     $.ajax({
         url: '/board/heart/' + id
@@ -66,8 +51,49 @@ function doHeart(id){
     });
 }
 
-function replyEditor(id){
-    alert("제작예정");
+function replyEditor(reply){
+    reply.getElementsByClassName("reply-content")[0].readOnly = false;
+
+    var replyEditButton = document.createElement("a");
+
+    // reply.getElementsByClassName("reply-edit")[0].remove();
+
+    replyEditButton.innerText = "변경완료";
+    replyEditButton.href = "javascript:;";
+    replyEditButton.onclick = (function(index) {
+        return function() {
+
+            let replyContent = reply.getElementsByClassName("reply-content")[0].value;
+            let POST = [];
+
+            POST = {
+                id : reply.Id
+                , replyContent : replyContent
+            }
+
+            $.ajax({
+                // url: '/board/doReply/' + id
+                url: '/api/doReply/' + boardId
+                // url: '/board/doHeart/' + id
+                , type: 'POST'
+                , data: POST
+                // , dataType: 'JSON'
+                , success: function (result) {
+                    if(result === "success"){
+                        heartOut(boardId);
+                        replyOut(boardId);
+                    }else{
+                        $('#reply-error').text(result);
+                    }
+                }
+                , error: function (request, status, error) {
+                    alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+                }
+            });
+        };
+    }(reply));
+    reply.getElementsByClassName("reply-edit")[0].append(replyEditButton);
+
 }
 
 function replyDeletor(replyId, boardId){
@@ -76,6 +102,7 @@ function replyDeletor(replyId, boardId){
             url: '/api/boards/deleteReply/' + replyId
             , type: 'DELETE'
             , success: function (result) {
+                // 댓글 삭제 이후 필요한 부분만 가져와준다. 새로고침은 할필요 없이 댓글과 좋아요만 가져오기
                 heartOut(boardId);
                 replyOut(boardId);
             }
@@ -94,7 +121,7 @@ function replyOut(id){
         , type: 'GET'
         , dataType: 'JSON'
         , success: function (result) {
-            $('#reply-out *').remove();
+            $('#reply-out *').remove();     // replyout함수가 불릴때마다 나타나있는 댓글 초기화하기
 
             let replyTable = document.createElement("table");
             replyTable.className = "table table-bordered";
@@ -103,43 +130,44 @@ function replyOut(id){
                 var tr = document.createElement("tr");
                 tr.Id = result[i].id;
                 var replyUserName = document.createElement("td");
-                var replyContent = document.createElement("td");
+                var replyContentContain = document.createElement("td");
+                var replyContent = document.createElement("textarea");
                 var replyEdit = document.createElement("td");
                 replyUserName.className = "reply-user";
                 replyContent.className = "reply-content";
+                replyContent.readOnly = true;
                 replyEdit.className = "reply-edit";
+
+                // 댓글 작성자 tr에 넣기
+                replyUserName.innerText = (result[i].userName);
+                tr.append(replyUserName);
+
+                // 댓글 내용 넣기
+                replyContent.innerText = (result[i].replyContent);
+                replyContentContain.append(replyContent);
+                tr.append(replyContentContain);
+
+                // 댓글 수정/삭제 기능 부여하기
                 if(result[i].checkUser){
                     var replyEditA = document.createElement("a");
                     var replyDeleteA = document.createElement("a");
                     replyEditA.innerText = "수정";
                     replyEditA.href = 'javascript:;';
-                    // replyEditA.onclick = function() {
-                    //     console.log("수정");
-                    //     check(this);
-                    // }
                     replyEditA.onclick = (function(index) {
                         return function() {
-                            replyEditor(index, id.value);
+                            replyEditor(index);
                         };
-                    }(result[i].id));
+                    }(tr));
                     replyDeleteA.innerText = "삭제";
                     replyDeleteA.href = 'javascript:;';
-                    // replyDeleteA.onclick = function(){
-                    //     console.log("삭제");
-                    //     check(this);
-                    // }
                     replyDeleteA.onclick = (function(index) {
                         return function() {
-                            replyDeletor(index, boardId);
+                            replyDeletor(index);
                         };
                     }(result[i].id));
                     replyEdit.append(replyEditA);
                     replyEdit.append(replyDeleteA);
                 }
-                replyUserName.innerText = (result[i].userName);
-                replyContent.innerText = (result[i].replyContent);
-                tr.append(replyUserName);
-                tr.append(replyContent);
                 tr.append(replyEdit);
                 replyTable.append(tr);
             }
@@ -170,6 +198,7 @@ function doReply(id){
         , success: function (result) {
             if(result === "success"){
                 $('#replyContent').text("");
+                heartOut(id);
                 replyOut(id);
             }else{
                 $('#reply-error').text(result);

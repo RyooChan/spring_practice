@@ -106,8 +106,8 @@ public class BoardService {
     // 작성글의 Id를 통해 관련 user의 정보를 가져온 후, 로그인한 Id와 id가 일치하는지 검사한다.
     // 일치하면 True, 다르면 False return
     @Transactional
-    public boolean confirmReply(long boardId, long sessionId){
-        Reply reply = replyRepository.findByBoardId(boardId);
+    public boolean confirmReply(long replyId, long sessionId){
+        Reply reply = replyRepository.findById(replyId);
         long replyUserId = reply.getUser().getId();
         return ( replyUserId == sessionId );
     }

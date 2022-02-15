@@ -9,6 +9,7 @@
 
 .reply-content{
     width: 70%;
+    resize: none;
 }
 
 .reply-edit{
