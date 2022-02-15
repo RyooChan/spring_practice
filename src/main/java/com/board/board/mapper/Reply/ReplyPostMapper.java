@@ -11,6 +11,7 @@ public interface ReplyPostMapper extends EntityMapper<ReplyPostDto, Reply> {
 
     @Override
     @Mapping(target = "userName", source = "user.name")
+    @Mapping(target = "userId",source = "user.id")
     @Mapping(target = "boardId",source = "board.id")
     ReplyPostDto toDto(Reply reply);
 }

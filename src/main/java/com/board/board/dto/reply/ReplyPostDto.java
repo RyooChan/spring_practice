@@ -19,5 +19,9 @@ public class ReplyPostDto {
 
     String userName;
 
+    long userId;
+
     long boardId;
+
+    boolean checkUser;
 }

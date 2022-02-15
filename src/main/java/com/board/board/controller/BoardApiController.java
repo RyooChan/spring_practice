@@ -1,6 +1,7 @@
 package com.board.board.controller;
 
 import java.util.List;
+import java.util.Objects;
 
 import com.board.board.domain.Board;
 import com.board.board.domain.Heart;
@@ -189,8 +190,19 @@ class BoardApiController {
     //     댓글 보여주기
     @GetMapping("/outReply/{id}")
     public List<ReplyPostDto> reply(@PathVariable Long id) throws Exception{
+        SessionUser user = (SessionUser) httpSession.getAttribute("user");
+        long userId = user.getId();
+
         List<ReplyPostDto> replyPostDto = replyPostMapper.toDtos(boardService.outReply(id));
+        for (ReplyPostDto postDto : replyPostDto) {
+            postDto.setCheckUser( postDto.getUserId() == userId );
+        }
         return replyPostDto;
+    }
+
+    @DeleteMapping("/boards/deleteReply/{id}")
+    void deleteReply(@PathVariable Long id) {
+        boardService.deleteReply(id);
     }
 
 }

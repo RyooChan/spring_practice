@@ -2,3 +2,15 @@
     width: 100%;
     min-height: 550px;
 }
+
+.reply-user{
+    width: 20%;
+}
+
+.reply-content{
+    width: 70%;
+}
+
+.reply-edit{
+    width: 10%;
+}

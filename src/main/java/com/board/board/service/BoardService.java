@@ -97,6 +97,10 @@ public class BoardService {
         boardRepository.deleteById(id);
     }
 
+    public void deleteReply(long id){
+        replyRepository.deleteById(id);
+    }
+
     // 댓글 작성자 확인
     // param : 작성글Id, 로그인 id
     // 작성글의 Id를 통해 관련 user의 정보를 가져온 후, 로그인한 Id와 id가 일치하는지 검사한다.

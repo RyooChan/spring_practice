@@ -1,3 +1,5 @@
+const boardId = id.value;
+
 function deleteBoard(id){
     if(confirm("삭제하시겠습니까?")){
         $.ajax({
@@ -64,7 +66,28 @@ function doHeart(id){
     });
 }
 
+function replyEditor(id){
+    alert("제작예정");
+}
+
+function replyDeletor(replyId, boardId){
+    if(confirm("댓글을 삭제하시겠습니까?")){
+        $.ajax({
+            url: '/api/boards/deleteReply/' + replyId
+            , type: 'DELETE'
+            , success: function (result) {
+                heartOut(boardId);
+                replyOut(boardId);
+            }
+            , error: function (request, status, error) {
+                alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
+            }
+        });
+    }
+}
+
 function replyOut(id){
+
     $.ajax({
         url: '/api/outReply/' + id
         // url: '/board/doHeart/' + id
@@ -78,14 +101,46 @@ function replyOut(id){
 
             for(var i=0; i<result.length; i++){
                 var tr = document.createElement("tr");
-                var replyId = document.createElement("td");
+                tr.Id = result[i].id;
                 var replyUserName = document.createElement("td");
                 var replyContent = document.createElement("td");
+                var replyEdit = document.createElement("td");
+                replyUserName.className = "reply-user";
+                replyContent.className = "reply-content";
+                replyEdit.className = "reply-edit";
+                if(result[i].checkUser){
+                    var replyEditA = document.createElement("a");
+                    var replyDeleteA = document.createElement("a");
+                    replyEditA.innerText = "수정";
+                    replyEditA.href = 'javascript:;';
+                    // replyEditA.onclick = function() {
+                    //     console.log("수정");
+                    //     check(this);
+                    // }
+                    replyEditA.onclick = (function(index) {
+                        return function() {
+                            replyEditor(index, id.value);
+                        };
+                    }(result[i].id));
+                    replyDeleteA.innerText = "삭제";
+                    replyDeleteA.href = 'javascript:;';
+                    // replyDeleteA.onclick = function(){
+                    //     console.log("삭제");
+                    //     check(this);
+                    // }
+                    replyDeleteA.onclick = (function(index) {
+                        return function() {
+                            replyDeletor(index, boardId);
+                        };
+                    }(result[i].id));
+                    replyEdit.append(replyEditA);
+                    replyEdit.append(replyDeleteA);
+                }
                 replyUserName.innerText = (result[i].userName);
                 replyContent.innerText = (result[i].replyContent);
-                tr.Id = result[i].id;
                 tr.append(replyUserName);
                 tr.append(replyContent);
+                tr.append(replyEdit);
                 replyTable.append(tr);
             }
             $('#reply-out').append(replyTable);
@@ -114,7 +169,7 @@ function doReply(id){
         // , dataType: 'JSON'
         , success: function (result) {
             if(result === "success"){
-                $('#replyContent').text();
+                $('#replyContent').text("");
                 replyOut(id);
             }else{
                 $('#reply-error').text(result);
@@ -129,19 +184,20 @@ function init(){
 
     // 좋아요 / 좋아요 취소
     document.getElementById("heart").addEventListener(
-        "click", event=>doHeart(id.value)
+        "click", event=>doHeart(boardId)
     )
 
     // 좋아요 정보 받아오기
-    heartOut(id.value);
+    heartOut(boardId);
 
     // 댓글 받아오기
-    replyOut(id.value);
+    replyOut(boardId);
 
     // 댓글 작성하기
     document.getElementById("post").addEventListener(
-        "click", event=>doReply(id.value)
+        "click", event=>doReply(boardId)
     )
+
 }
 
 init();
