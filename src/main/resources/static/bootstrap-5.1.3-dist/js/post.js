@@ -95,7 +95,7 @@ function replyEditor(reply){
 
 }
 
-function replyDeletor(replyId, boardId){
+function replyDeletor(replyId){
     if(confirm("댓글을 삭제하시겠습니까?")){
         $.ajax({
             url: '/api/boards/deleteReply/' + replyId

@@ -18,7 +18,7 @@
 //     target.remove();    // 파일 삭제
 // }
 //
-
+const boardId = id.value;
 let oEditors = [];
 
 function smartEditor(){
@@ -43,9 +43,9 @@ function save(){
         let content = document.getElementById("content").value;
         let POST = [];
 
-        if(!isNaN(id.value)) {
+        if(!isNaN(boardId)) {
             POST = {
-                id : id.value
+                id : boardId
                 , title: title
                 , content: content
             }
@@ -62,7 +62,6 @@ function save(){
             , type: 'POST'
             , data: POST
             , success: function(data){
-                console.log(data);
                 if(data.startsWith('<div class="container" >')){        // 아무리 해보려해도 안돼서 변경되는 부분을 찾아 하드코딩 진행함.
                     $('#form').replaceWith(data);
                     smartEditor();
