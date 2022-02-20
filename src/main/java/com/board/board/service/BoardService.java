@@ -9,6 +9,7 @@ import com.board.board.repository.HeartRepository;
 import com.board.board.repository.ReplyRepository;
 import com.board.board.repository.oauth.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,8 +33,9 @@ public class BoardService {
 
 //    public List<Board> list(String searchText){
     public List<Board> list(String searchText){
+        Sort sort = Sort.by(Sort.Direction.DESC, "id");
 //        return boardRepository.findByTitleContainingOrContentContaining(searchText, searchText);
-        return boardRepository.findByTitleContainingOrContentContaining(searchText, searchText);
+        return boardRepository.findAllByTitleContainingOrContentContaining(searchText, searchText, sort);
     }
 
     // 작성자 확인

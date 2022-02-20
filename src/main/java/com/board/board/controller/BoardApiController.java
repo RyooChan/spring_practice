@@ -166,16 +166,11 @@ class BoardApiController {
             return errorMsg.toString();
         }
 
-        System.out.println("------------------");
-        System.out.println(replySaveDto);
-
         SessionUser user = (SessionUser) httpSession.getAttribute("user");
         long userId = user.getId();
 
         Reply reply = replySaveMapper.toEntity(replySaveDto);
         replySaveMapper.updateFromDto(replySaveDto, reply);
-
-        System.out.println(reply);
 
         if(replySaveDto.getId() > 0){       // 댓글 수정시
             if(!boardService.confirmReply(replySaveDto.getId(), userId)){   // 본인확인 logic
