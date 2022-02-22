@@ -32,24 +32,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api")
+// api 표시 이후 삭제예정 -> 모두 REST로 변경 이후
+@RequestMapping("/api/boards")
 class BoardApiController {
     private final HttpSession httpSession;
-
     private final BoardRepository boardRepository;
-
     private final BoardApiService boardApiService;
-
     private final BoardService boardService;
-
     private final BoardPostMapper boardPostMapper;
-
     private final ReplySaveMapper replySaveMapper;
-
     private final ReplyPostMapper replyPostMapper;
-
     private final HeartMapper heartMapper;
-
     @Autowired
     public BoardApiController(HttpSession httpSession, BoardRepository boardRepository, BoardApiService boardApiService, BoardService boardService, BoardPostMapper boardPostMapper, ReplySaveMapper replySaveMapper, ReplyPostMapper replyPostMapper, HeartMapper heartMapper) {
         this.httpSession = httpSession;
@@ -75,7 +68,6 @@ class BoardApiController {
 
     @GetMapping("/boards/{id}")
     Board one(@PathVariable Long id) {
-
         return boardRepository.findById(id).orElse(null);
     }
 
@@ -93,7 +85,7 @@ class BoardApiController {
                 });
     }
 
-    @PostMapping("/boards/form")
+    @PostMapping("/post")
     Model form(Model model, @Valid BoardPostDto boardPostDto, BindingResult bindingResult, HttpSession httpSession){
 
         if(bindingResult.hasErrors()){      // 제목이 2글자 이하이거나 30자 이상인 경우 에러를 출력한다.
@@ -120,20 +112,20 @@ class BoardApiController {
 //    @PreAuthorize("(isAuthenticated() and ( #userid == authentication.principal.userid )  ) or hasRole('ROLE_ADMIN')")
 //    @PostAuthorize("returnObject.title == authentication.principal.username")
 //    @Secured("ROLE_ADMIN") // admin사용자만 delete 메소드를 호출할 수 있도록 한다.
-    @DeleteMapping("/boards/{id}")
+    @DeleteMapping("/{id}")
     void deleteBoard(@PathVariable Long id) {
         boardService.deleteBoard(id);
     }
 
 
     // 좋아요/해제
-    @PostMapping("/doHeart/{id}")
+    @PostMapping("/heart/{id}")
     public void doHeart(@PathVariable Long id){
         SessionUser user = (SessionUser) httpSession.getAttribute("user");
         long userId = user.getId();
 
         // 현재 로그인한 아이디와, board의 Id를 바탕으로 좋아요가 되어있나 확인한다.
-        Long wholeHeart = boardService.getHeartCount(id);
+//        Long wholeHeart = boardService.getHeartCount(id);
         HeartDto heartDto = heartMapper.toDto(boardService.getMyHeart(id, userId));
         boolean myHeart = heartDto != null;     // heartDto가 있으면 true, 없으면 false
 
@@ -153,7 +145,7 @@ class BoardApiController {
     }
 
     //     댓글 쓰기
-    @PostMapping("/doReply/{boardId}")
+    @PostMapping("/reply/{boardId}")
     public String doReply(@Valid ReplySaveDto replySaveDto, BindingResult bindingResult, HttpSession httpSession) throws Exception{
 
         if(bindingResult.hasErrors()) {      // 제목이 2글자 이하이거나 30자 이상인 경우 에러를 출력한다.
@@ -183,7 +175,7 @@ class BoardApiController {
     }
 
     //     댓글 보여주기
-    @GetMapping("/outReply/{id}")
+    @GetMapping("/reply/{id}")
     public List<ReplyPostDto> reply(@PathVariable Long id) throws Exception{
         SessionUser user = (SessionUser) httpSession.getAttribute("user");
         long userId = user.getId();
@@ -195,7 +187,8 @@ class BoardApiController {
         return replyPostDto;
     }
 
-    @DeleteMapping("/boards/deleteReply/{id}")
+    // 댓글 삭제
+    @DeleteMapping("/reply/{id}")
     void deleteReply(@PathVariable Long id) {
         boardService.deleteReply(id);
     }

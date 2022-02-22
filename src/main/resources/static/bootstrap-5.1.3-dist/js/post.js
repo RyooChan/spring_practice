@@ -37,7 +37,7 @@ function heartOut(id){
 
 function doHeart(id){
     $.ajax({
-        url: '/api/doHeart/' + id
+        url: '/api/boards/heart/' + id
         // url: '/board/doHeart/' + id
         , type: 'POST'
         // , dataType: 'JSON'
@@ -72,7 +72,7 @@ function replyEditor(reply){
 
             $.ajax({
                 // url: '/board/doReply/' + id
-                url: '/api/doReply/' + boardId
+                url: '/api/boards/reply/' + boardId
                 // url: '/board/doHeart/' + id
                 , type: 'POST'
                 , data: POST
@@ -98,7 +98,7 @@ function replyEditor(reply){
 function replyDeletor(replyId){
     if(confirm("댓글을 삭제하시겠습니까?")){
         $.ajax({
-            url: '/api/boards/deleteReply/' + replyId
+            url: '/api/boards/reply/' + replyId
             , type: 'DELETE'
             , success: function (result) {
                 // 댓글 삭제 이후 필요한 부분만 가져와준다. 새로고침은 할필요 없이 댓글과 좋아요만 가져오기
@@ -115,7 +115,7 @@ function replyDeletor(replyId){
 function replyOut(id){
 
     $.ajax({
-        url: '/api/outReply/' + id
+        url: '/api/boards/reply/' + id
         // url: '/board/doHeart/' + id
         , type: 'GET'
         , dataType: 'JSON'
@@ -188,7 +188,7 @@ function doReply(id){
 
     $.ajax({
         // url: '/board/doReply/' + id
-        url: '/api/doReply/' + id
+        url: '/api/boards/reply/' + id
         // url: '/board/doHeart/' + id
         , type: 'POST'
         , data: POST

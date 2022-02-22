@@ -81,6 +81,7 @@ public class BoardController {
     // 게시판의 글을 저장하고, 에러가 있으면 이를 알려준다.
     // 세션으로 저장된 userid를 가져오기 위해 HttpSession을 받아온다. 이후 그곳에 저장된 userEmail을 통해 저장한다.
     // 겹치지 않는 값은 userid를 통해 유저를 검색하고, 그 유저의 id를 저장시킨다.
+    // restApi에서 Putmapping을 사용해서 변경하도록 하는게 나을듯?
     @PostMapping("/form")
     public String form(@Valid BoardPostDto boardPostDto, BindingResult bindingResult, HttpSession httpSession) throws Exception{
 
@@ -102,7 +103,6 @@ public class BoardController {
 
         boardService.save(userEmail, board);  // 글 저장 save
 
-//        return "redirect:/board/list";
         return "board/form";
     }
 
