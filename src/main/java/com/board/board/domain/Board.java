@@ -9,6 +9,10 @@ import org.hibernate.validator.constraints.Length;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity // DB와의 연결을 위하여
 @Data   // getter setter
@@ -30,4 +34,11 @@ public class Board {
     @ManyToOne
     @JoinColumn(name="user_id", referencedColumnName = "id")
     private User user;
+
+    // 삭제 CASCADE를 위함
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    List<Reply> replys = new ArrayList<>();
+
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    List<Heart> hearts = new ArrayList<>();
 }
