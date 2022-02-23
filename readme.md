@@ -21,6 +21,7 @@
   * 백엔드 기능이 끝난 후 UI변경 예정.
 * Board/User 삭제 시 Heart, Reply삭제를 cascade 사용해서 부여함.
   * 이 경우 OneToMany가 삭제 시, ManyToOne의 id를 가지고 하나하나 삭제하는데 OneToMany의 아이디를 통해 삭제하는 방법으로 변경하는 것이 효율적일 것이라 생각한다.  
+    * But JPA에서 cascade 사용시, 전체 데이터를 벌크로 삭제하는 방법은 구현할 수 없다고 하여, 다른 데이터의 구현이 완료된 후 jdbc템플릿 등을 이용하여 변경할 예정.
 ---
 ## 예정
 * OAuth2 + JWT구현 예정
