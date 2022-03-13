@@ -1,6 +1,8 @@
 # 스프링부트 게시판
 
-* 2022-02-16기준 제작중
+**Spring JPA, REST api공부 진행중. 공부 후 해당 프로젝트 전체 변경 예정**
+
+* 2022-03-13기준 HOLD
    * https://ec2-13-124-106-98.ap-northeast-2.compute.amazonaws.com:8443/
 * 다양한 기능을 부여하는 게시판 제작하기
 
