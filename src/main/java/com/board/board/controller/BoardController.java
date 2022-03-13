@@ -242,5 +242,5 @@ public class BoardController {
 //        model.addAttribute("heartUser", myHeart);
 //        return modelAndView;
 //    }
-
+//}
 }

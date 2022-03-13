@@ -18,6 +18,7 @@ import com.board.board.mapper.Reply.ReplySaveMapper;
 import com.board.board.repository.BoardRepository;
 import com.board.board.service.BoardApiService;
 import com.board.board.service.BoardService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -34,6 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 // api 표시 이후 삭제예정 -> 모두 REST로 변경 이후
 @RequestMapping("/api/boards")
+@RequiredArgsConstructor
 class BoardApiController {
     private final HttpSession httpSession;
     private final BoardRepository boardRepository;
@@ -43,17 +45,6 @@ class BoardApiController {
     private final ReplySaveMapper replySaveMapper;
     private final ReplyPostMapper replyPostMapper;
     private final HeartMapper heartMapper;
-    @Autowired
-    public BoardApiController(HttpSession httpSession, BoardRepository boardRepository, BoardApiService boardApiService, BoardService boardService, BoardPostMapper boardPostMapper, ReplySaveMapper replySaveMapper, ReplyPostMapper replyPostMapper, HeartMapper heartMapper) {
-        this.httpSession = httpSession;
-        this.boardRepository = boardRepository;
-        this.boardApiService = boardApiService;
-        this.boardService = boardService;
-        this.boardPostMapper = boardPostMapper;
-        this.replySaveMapper = replySaveMapper;
-        this.replyPostMapper = replyPostMapper;
-        this.heartMapper = heartMapper;
-    }
 
     @GetMapping("/boards")
     List<BoardPostDto> all(@RequestParam(required = false, defaultValue = "") String title, @RequestParam(required = false, defaultValue = "") String content ) {
@@ -188,6 +179,7 @@ class BoardApiController {
     }
 
     // 댓글 삭제
+    // 본래 삭제도 flag를 통해 진행하는것이 좋지만, 좋아요는 간단하기 때문에 이렇게 함.
     @DeleteMapping("/reply/{id}")
     void deleteReply(@PathVariable Long id) {
         boardService.deleteReply(id);
