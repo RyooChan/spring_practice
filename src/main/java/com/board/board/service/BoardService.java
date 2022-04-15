@@ -9,6 +9,7 @@ import com.board.board.repository.HeartRepository;
 import com.board.board.repository.ReplyRepository;
 import com.board.board.repository.oauth.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

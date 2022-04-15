@@ -38,6 +38,8 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         // OAuth2UserService
         OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
 
+        System.out.println("============ 토큰 =================");
+        System.out.println(userRequest.getAccessToken().getTokenValue());
 
         // 세션 삭제하기 --------------------
         User user = saveOrUpdate(attributes);
