@@ -5,10 +5,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 
 import java.util.List;
 
-public interface BoardRepository extends JpaRepository<Board, Long> {
+public interface BoardRepository extends JpaRepository<Board, Long>, BoardRepositoryCustom, QuerydslPredicateExecutor<Board> {
 
     List<Board> findByTitleOrContent(String title, String content);
 
@@ -20,4 +21,5 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
    List<Board> findAllByTitleContainingOrContentContaining(String title, String content, Sort sort);
 
     Board findByUserId(long user_id);
+
 }

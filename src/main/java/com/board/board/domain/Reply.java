@@ -17,16 +17,13 @@ public class Reply {
 
     @NotBlank
     @Lob
-    @Size(min = 10, max = 500)
     private String replyContent;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="userId", referencedColumnName = "id")
-    @JsonIgnore
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="boardId", referencedColumnName = "id")
-    @JsonIgnore
     private Board board;
 }

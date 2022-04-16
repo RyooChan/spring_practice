@@ -4,6 +4,8 @@ import com.board.board.domain.oauth.User;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
@@ -23,22 +25,31 @@ public class Board {
     private Long id;
 
     @NotNull
-    @Size(min=2, max=30)
     private String title;
 
-    @Length(min=20)
     @Lob
     @Column(columnDefinition="TEXT", nullable = false)
     private String content;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id", referencedColumnName = "id")
     private User user;
 
     // 삭제 CASCADE를 위함
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
-    List<Reply> replys = new ArrayList<>();
+//    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+//    private List<Reply> replys = new ArrayList<>();
+//
+//    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+//    private List<Heart> hearts = new ArrayList<>();
 
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
-    List<Heart> hearts = new ArrayList<>();
+    public Board(Long id, String title, String content, User user) {
+        this.id = id;
+        this.title = title;
+        this.content = content;
+        this.user = user;
+    }
+
+    public Board() {
+
+    }
 }
