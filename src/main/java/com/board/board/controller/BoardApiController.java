@@ -1,7 +1,6 @@
 package com.board.board.controller;
 
 import java.util.List;
-import java.util.Objects;
 
 import com.board.board.domain.Board;
 import com.board.board.domain.Heart;
@@ -17,9 +16,8 @@ import com.board.board.mapper.Reply.ReplyPostMapper;
 import com.board.board.mapper.Reply.ReplySaveMapper;
 import com.board.board.repository.BoardRepository;
 import com.board.board.service.BoardApiService;
-import com.board.board.service.BoardService;
+import com.board.board.service.BoardService2;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -40,7 +38,7 @@ class BoardApiController {
     private final HttpSession httpSession;
     private final BoardRepository boardRepository;
     private final BoardApiService boardApiService;
-    private final BoardService boardService;
+    private final BoardService2 boardService2;
     private final BoardPostMapper boardPostMapper;
     private final ReplySaveMapper replySaveMapper;
     private final ReplyPostMapper replyPostMapper;
@@ -93,7 +91,7 @@ class BoardApiController {
         Board board = boardPostMapper.toEntity(boardPostDto);           // mapstruct를 사용하여 Dto의 정보를 entity로 바꾸어준다.
         boardPostMapper.updateFromDto(boardPostDto, board);             // null인 값들을 빼주기 위한 updateFromDto
 
-        boardService.save(userEmail, board);  // 글 저장 save
+        boardService2.save(userEmail, board);  // 글 저장 save
 
         model.addAttribute("result", "success");
 //        return "redirect:/board/list";
@@ -105,7 +103,7 @@ class BoardApiController {
 //    @Secured("ROLE_ADMIN") // admin사용자만 delete 메소드를 호출할 수 있도록 한다.
     @DeleteMapping("/{id}")
     void deleteBoard(@PathVariable Long id) {
-        boardService.deleteBoard(id);
+        boardService2.deleteBoard(id);
     }
 
 
@@ -117,12 +115,12 @@ class BoardApiController {
 
         // 현재 로그인한 아이디와, board의 Id를 바탕으로 좋아요가 되어있나 확인한다.
 //        Long wholeHeart = boardService.getHeartCount(id);
-        HeartDto heartDto = heartMapper.toDto(boardService.getMyHeart(id, userId));
+        HeartDto heartDto = heartMapper.toDto(boardService2.getMyHeart(id, userId));
         boolean myHeart = heartDto != null;     // heartDto가 있으면 true, 없으면 false
 
         // 좋아요가 되어 있다면 취소해줄 예정이다.
         if(myHeart){
-            boardService.deleteHeart(heartDto.getId());
+            boardService2.deleteHeart(heartDto.getId());
         }else{
             heartDto = new HeartDto();
             heartDto.setBoardId(id);
@@ -131,7 +129,7 @@ class BoardApiController {
             Heart heart = heartMapper.toEntity(heartDto);
             System.out.println(heart);
             heartMapper.updateFromDto(heartDto, heart);             // null인 값들을 빼주기 위한 updateFromDto 적용
-            boardService.saveHeart(heart);
+            boardService2.saveHeart(heart);
         }
     }
 
@@ -156,12 +154,12 @@ class BoardApiController {
         replySaveMapper.updateFromDto(replySaveDto, reply);
 
         if(replySaveDto.getId() > 0){       // 댓글 수정시
-            if(!boardService.confirmReply(replySaveDto.getId(), userId)){   // 본인확인 logic
+            if(!boardService2.confirmReply(replySaveDto.getId(), userId)){   // 본인확인 logic
                 return "Nope.";
             }
         }
 
-        boardService.saveReply(userId, reply);  // 댓글 저장 save
+        boardService2.saveReply(userId, reply);  // 댓글 저장 save
         return "success";
     }
 
@@ -171,7 +169,7 @@ class BoardApiController {
         SessionUser user = (SessionUser) httpSession.getAttribute("user");
         long userId = user.getId();
 
-        List<ReplyPostDto> replyPostDto = replyPostMapper.toDtos(boardService.outReply(id));
+        List<ReplyPostDto> replyPostDto = replyPostMapper.toDtos(boardService2.outReply(id));
         for (ReplyPostDto postDto : replyPostDto) {
             postDto.setCheckUser( postDto.getUserId() == userId );
         }
@@ -182,7 +180,7 @@ class BoardApiController {
     // 본래 삭제도 flag를 통해 진행하는것이 좋지만, 좋아요는 간단하기 때문에 이렇게 함.
     @DeleteMapping("/reply/{id}")
     void deleteReply(@PathVariable Long id) {
-        boardService.deleteReply(id);
+        boardService2.deleteReply(id);
     }
 
 }

@@ -38,20 +38,14 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         // OAuth2UserService
         OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
 
-        System.out.println("============ 토큰 =================");
-        System.out.println(userRequest.getAccessToken().getTokenValue());
-
         // 세션 삭제하기 --------------------
         User user = saveOrUpdate(attributes);
         httpSession.setAttribute("user", new SessionUser(user)); // SessionUser (직렬화된 dto 클래스 사용)
         // -----------------------------
 
-
         return new DefaultOAuth2User(Collections.singleton(new SimpleGrantedAuthority(user.getRoleKey())),
                 attributes.getAttributes(),
                 attributes.getNameAttributeKey());
-
-
     }
 
     // 유저 생성 및 수정 서비스 로직
