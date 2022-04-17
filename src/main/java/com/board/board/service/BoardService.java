@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class BoardService {
     private final BoardRepository boardRepository;
 
-    @Transactional
     public Page<BoardListDto> searchBoardList(BoardSearchCondition condition, Pageable pageable){
         return boardRepository.searchBoardListPage(condition, pageable);
     }
