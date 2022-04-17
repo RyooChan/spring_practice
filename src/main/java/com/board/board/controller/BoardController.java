@@ -1,13 +1,17 @@
 package com.board.board.controller;
 
+import com.board.board.domain.Board;
 import com.board.board.dto.Board.BoardListDto;
 import com.board.board.dto.Board.BoardPostDto;
 import com.board.board.dto.Board.BoardSearchCondition;
+import com.board.board.mapper.Board.BoardPostMapper;
 import com.board.board.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class BoardController {
     private final BoardService boardService;
+    private final BoardPostMapper boardPostMapper;
 
     /**
      * 게시글 List 출력
@@ -28,9 +33,11 @@ public class BoardController {
         return boardService.searchBoardList(condition, pageable);
     }
 
-//    @GetMapping("/{id}")
-//    public ResponseBody<BoardPostDto> searchBoard(){
-//
-//    }
+    @GetMapping("/post")
+    public ResponseEntity<BoardPostDto> searchBoard(@RequestParam(required = false) Long id){
+        Board board = boardService.searchBoard(id);
+        BoardPostDto boardPostDto = boardPostMapper.toDto(board);
+        return new ResponseEntity<>(boardPostDto, HttpStatus.OK);
+    }
 
 }

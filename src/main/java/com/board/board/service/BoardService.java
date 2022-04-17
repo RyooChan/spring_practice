@@ -3,6 +3,7 @@ package com.board.board.service;
 import com.board.board.domain.Board;
 import com.board.board.domain.oauth.User;
 import com.board.board.dto.Board.BoardListDto;
+import com.board.board.dto.Board.BoardPostDto;
 import com.board.board.dto.Board.BoardSearchCondition;
 import com.board.board.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,10 @@ public class BoardService {
 
     public Page<BoardListDto> searchBoardList(BoardSearchCondition condition, Pageable pageable){
         return boardRepository.searchBoardListPage(condition, pageable);
+    }
+
+    public Board searchBoard(Long id){
+        return boardRepository.findById(id).orElse(null);
     }
 
 }
