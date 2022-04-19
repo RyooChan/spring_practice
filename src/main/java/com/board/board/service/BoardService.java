@@ -43,4 +43,11 @@ public class BoardService {
         });
         return findBoard.orElse(null);
     }
+
+    public void deleteBoard(Long boardId){
+        Optional<Board> findBoard = boardRepository.findById(boardId);
+        findBoard.ifPresent(selectBoard->{
+            selectBoard.setDeleted(true);
+        });
+    }
 }

@@ -38,8 +38,12 @@ public class BoardController {
     @GetMapping("/post")
     public ResponseEntity<BoardPostDto> searchBoard(@RequestParam(required = false) Long id){
         Board board = boardService.searchBoard(id);
-        BoardPostDto boardPostDto = boardPostMapper.toDto(board);
-        return new ResponseEntity<>(boardPostDto, HttpStatus.OK);
+        if(!board.isDeleted()){
+            BoardPostDto boardPostDto = boardPostMapper.toDto(board);
+            return new ResponseEntity<>(boardPostDto, HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping("/post")
@@ -56,6 +60,12 @@ public class BoardController {
         Board result = boardService.updateBoard(board, boardId);
         BoardPostDto responseBoardInfo = boardPostMapper.toDto(result);
         return new ResponseEntity<>(responseBoardInfo, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/post")
+    public ResponseEntity deleteBoard(Long boardId){
+        boardService.deleteBoard(boardId);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
 }

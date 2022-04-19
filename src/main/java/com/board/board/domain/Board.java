@@ -3,6 +3,7 @@ package com.board.board.domain;
 import com.board.board.domain.oauth.User;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +35,8 @@ public class Board {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id", referencedColumnName = "id")
     private User user;
+
+    private boolean isDeleted = false;
 
     // 삭제 CASCADE를 위함
 //    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)

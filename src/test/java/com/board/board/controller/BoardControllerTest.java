@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -102,5 +103,23 @@ class BoardControllerTest {
         assertThat(result.getBody().getTitle()).isEqualTo("변경 제목");
         assertThat(result.getBody().getContent()).isEqualTo("내용도 변경함");
 
+    }
+
+    @Test
+    public void 글삭제() throws Exception {
+        //given
+        User user = new User(1L, "찬", "fbcks97@naver.com", "picture", Role.GUEST);
+        userRepository.save(user);
+
+        for(int i=0; i<100; i++){
+            Board board = new Board((long) i, "제목"+i, "내용"+i, user);
+            boardRepository.save(board);
+        }
+
+        //when
+        boardController.deleteBoard(3L);
+
+        //then
+        assertThat(boardController.searchBoard(3L).getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     }
 }
