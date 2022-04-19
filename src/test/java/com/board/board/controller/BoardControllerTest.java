@@ -77,4 +77,30 @@ class BoardControllerTest {
         ResponseEntity<BoardPostDto> result = boardController.searchBoard(boardId);
         assertThat(result.getBody().getContent()).isEqualTo("내용3");
     }
+
+    @Test
+    public void 글확인() throws Exception {
+        //given
+        User user = new User(1L, "찬", "fbcks97@naver.com", "picture", Role.GUEST);
+        userRepository.save(user);
+
+        for(int i=0; i<100; i++){
+            Board board = new Board((long) i, "제목"+i, "내용"+i, user);
+            boardRepository.save(board);
+        }
+
+        //when
+        Long boardId = 3L;
+
+        BoardPostDto boardPostDto = new BoardPostDto();
+        boardPostDto.setTitle("변경 제목");
+        boardPostDto.setContent("내용도 변경함");
+
+        ResponseEntity<BoardPostDto> result = boardController.updateBoard(boardPostDto, boardId);
+
+        //then
+        assertThat(result.getBody().getTitle()).isEqualTo("변경 제목");
+        assertThat(result.getBody().getContent()).isEqualTo("내용도 변경함");
+
+    }
 }

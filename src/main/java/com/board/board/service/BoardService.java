@@ -4,13 +4,18 @@ import com.board.board.domain.Board;
 import com.board.board.domain.oauth.User;
 import com.board.board.dto.Board.BoardListDto;
 import com.board.board.dto.Board.BoardPostDto;
+import com.board.board.dto.Board.BoardSaveDto;
 import com.board.board.dto.Board.BoardSearchCondition;
 import com.board.board.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,4 +31,16 @@ public class BoardService {
         return boardRepository.findById(id).orElse(null);
     }
 
+    public Board saveBoard(Board board){
+        return boardRepository.save(board);
+    }
+
+    public Board updateBoard(Board board, Long boardId){
+        Optional<Board> findBoard = boardRepository.findById(boardId);
+        findBoard.ifPresent(selectBoard->{
+            selectBoard.setTitle(board.getTitle());
+            selectBoard.setContent(board.getContent());
+        });
+        return findBoard.orElse(null);
+    }
 }

@@ -14,8 +14,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
-@RequestMapping("/api/boards")
+@RequestMapping("/api/boards/v2")
 @RequiredArgsConstructor
 public class BoardController {
     private final BoardService boardService;
@@ -38,6 +40,22 @@ public class BoardController {
         Board board = boardService.searchBoard(id);
         BoardPostDto boardPostDto = boardPostMapper.toDto(board);
         return new ResponseEntity<>(boardPostDto, HttpStatus.OK);
+    }
+
+    @PostMapping("/post")
+    public ResponseEntity<BoardPostDto> saveBoard(BoardPostDto boardPostDto){
+        Board board = boardPostMapper.toEntity(boardPostDto);
+        Board result = boardService.saveBoard(board);
+        BoardPostDto responseBoardInfo = boardPostMapper.toDto(result);
+        return new ResponseEntity<>(responseBoardInfo, HttpStatus.OK);
+    }
+
+    @PutMapping("/post")
+    public ResponseEntity<BoardPostDto> updateBoard(BoardPostDto boardPostDto, Long boardId){
+        Board board = boardPostMapper.toEntity(boardPostDto);
+        Board result = boardService.updateBoard(board, boardId);
+        BoardPostDto responseBoardInfo = boardPostMapper.toDto(result);
+        return new ResponseEntity<>(responseBoardInfo, HttpStatus.OK);
     }
 
 }
