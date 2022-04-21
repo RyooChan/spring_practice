@@ -44,6 +44,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                         boardIdEq(condition.getId())
                         , boardTitleEq(condition.getTitle())
                         , boardUserNameEq(condition.getUserName())
+                        , board.isDeleted.isFalse()
                 )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())

@@ -61,6 +61,34 @@ class BoardControllerTest {
     }
 
     @Test
+    public void 삭제테스트() throws Exception {
+        //given
+        User user = new User(1L, "찬", "fbcks97@naver.com", "picture", Role.GUEST);
+        userRepository.save(user);
+        for(int i=0; i<100; i++){
+            Board board = new Board((long) i, "제목"+i, "내용"+i, user);
+            board.setDeleted(true);
+            boardRepository.save(board);
+        }
+
+
+        //when
+        BoardSearchCondition condition = new BoardSearchCondition();
+        condition.setTitle("제목1");
+        System.out.println(condition);
+
+        PageRequest pageRequest = PageRequest.of(0, 10);
+        Page<BoardListDto> results = boardController.findBoardList(condition, pageRequest);
+
+        //then
+        System.out.println("~~~~~~~~~~~~~~~~~~~~~");
+        for (BoardListDto result : results) {
+            System.out.println(result);
+        }
+        System.out.println("~~~~~~~~~~~~~~~~~~~~~");
+    }
+
+    @Test
     public void 작성글내용확인() throws Exception {
         //given
         User user = new User(1L, "찬", "fbcks97@naver.com", "picture", Role.GUEST);
