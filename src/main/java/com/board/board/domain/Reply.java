@@ -26,4 +26,6 @@ public class Reply {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="boardId", referencedColumnName = "id")
     private Board board;
+
+    private boolean isDeleted = false;
 }
