@@ -71,7 +71,6 @@ class BoardControllerTest {
             boardRepository.save(board);
         }
 
-
         //when
         BoardSearchCondition condition = new BoardSearchCondition();
         condition.setTitle("제목1");

@@ -1,6 +1,7 @@
 package com.board.board.repository;
 
 import com.board.board.domain.Board;
+import org.hibernate.annotations.SQLDelete;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,6 +10,7 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 
 import java.util.List;
 
+@SQLDelete(sql = "update Board set isDeleted=true where id=?")
 public interface BoardRepository extends JpaRepository<Board, Long>, BoardRepositoryCustom, QuerydslPredicateExecutor<Board> {
 
     List<Board> findByTitleOrContent(String title, String content);
