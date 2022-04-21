@@ -50,7 +50,7 @@ class BoardControllerTest {
         System.out.println(condition);
 
         PageRequest pageRequest = PageRequest.of(0, 10);
-        Page<BoardListDto> results = boardController.searchBoardList(condition, pageRequest);
+        Page<BoardListDto> results = boardController.findBoardList(condition, pageRequest);
 
         //then
         System.out.println("~~~~~~~~~~~~~~~~~~~~~");
@@ -75,7 +75,7 @@ class BoardControllerTest {
         Long boardId = 3L;
 
         //then
-        ResponseEntity<BoardPostDto> result = boardController.searchBoard(boardId);
+        ResponseEntity<BoardPostDto> result = boardController.findBoard(boardId);
         assertThat(result.getBody().getContent()).isEqualTo("내용3");
     }
 
@@ -120,6 +120,6 @@ class BoardControllerTest {
         boardController.deleteBoard(3L);
 
         //then
-        assertThat(boardController.searchBoard(3L).getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(boardController.findBoard(3L).getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     }
 }

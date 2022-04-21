@@ -30,14 +30,14 @@ public class BoardController {
      * @return
      */
     @GetMapping("/list")
-    public Page<BoardListDto> searchBoardList(@RequestParam(required = false, defaultValue = "") BoardSearchCondition condition
+    public Page<BoardListDto> findBoardList(@RequestParam(required = false, defaultValue = "") BoardSearchCondition condition
                                    , @PageableDefault(size = 10) Pageable pageable){
-        return boardService.searchBoardList(condition, pageable);
+        return boardService.findBoardList(condition, pageable);
     }
 
     @GetMapping("/post")
-    public ResponseEntity<BoardPostDto> searchBoard(@RequestParam(required = false) Long id){
-        Board board = boardService.searchBoard(id);
+    public ResponseEntity<BoardPostDto> findBoard(@RequestParam(required = false) Long id){
+        Board board = boardService.findBoard(id);
         if(!board.isDeleted()){
             BoardPostDto boardPostDto = boardPostMapper.toDto(board);
             return new ResponseEntity<>(boardPostDto, HttpStatus.OK);

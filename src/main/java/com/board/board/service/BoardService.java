@@ -23,11 +23,11 @@ import java.util.Optional;
 public class BoardService {
     private final BoardRepository boardRepository;
 
-    public Page<BoardListDto> searchBoardList(BoardSearchCondition condition, Pageable pageable){
+    public Page<BoardListDto> findBoardList(BoardSearchCondition condition, Pageable pageable){
         return boardRepository.searchBoardListPage(condition, pageable);
     }
 
-    public Board searchBoard(Long id){
+    public Board findBoard(Long id){
         return boardRepository.findById(id).orElse(null);
     }
 
