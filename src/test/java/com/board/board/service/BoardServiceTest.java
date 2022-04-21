@@ -40,23 +40,20 @@ class BoardServiceTest {
         userRepository.save(user);
         for(int i=0; i<100; i++){
             Board board = new Board((long) i, "제목"+i, "내용"+i, user);
-            board.setDeleted(true);
             boardRepository.save(board);
         }
 
         //when
-        BoardSearchCondition condition = new BoardSearchCondition();
-        condition.setTitle("제목1");
-        System.out.println(condition);
+        boardService.deleteBoard(4L);
+        boardService.deleteBoard(15L);
 
-        Board board = boardService.findBoard(4L);
+        Board board = boardService.findBoard(5L);
         Board board2 = boardService.findBoard(15L);
 
         //then
         System.out.println("~~~~~~~~~~~~~~~~~~~~~");
-        assertThat(board.isDeleted()).isTrue();
-        assertThat(board2.isDeleted()).isTrue();
         System.out.println(board);
+        System.out.println(board2);
         System.out.println("~~~~~~~~~~~~~~~~~~~~~");
     }
 

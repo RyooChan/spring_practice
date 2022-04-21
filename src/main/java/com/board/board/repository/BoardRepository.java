@@ -10,7 +10,6 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 
 import java.util.List;
 
-@SQLDelete(sql = "update Board set isDeleted=true where id=?")
 public interface BoardRepository extends JpaRepository<Board, Long>, BoardRepositoryCustom, QuerydslPredicateExecutor<Board> {
 
     List<Board> findByTitleOrContent(String title, String content);
