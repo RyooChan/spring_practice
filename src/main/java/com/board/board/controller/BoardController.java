@@ -38,12 +38,8 @@ public class BoardController {
     @GetMapping("/post")
     public ResponseEntity<BoardPostDto> findBoard(@RequestParam(required = false) Long id){
         Board board = boardService.findBoard(id);
-        if(!board.isDeleted()){
-            BoardPostDto boardPostDto = boardPostMapper.toDto(board);
-            return new ResponseEntity<>(boardPostDto, HttpStatus.OK);
-        }else{
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+        BoardPostDto boardPostDto = boardPostMapper.toDto(board);
+        return new ResponseEntity<>(boardPostDto, HttpStatus.OK);
     }
 
     @PostMapping("/post")

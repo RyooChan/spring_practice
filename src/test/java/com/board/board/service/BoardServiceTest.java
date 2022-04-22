@@ -5,6 +5,7 @@ import com.board.board.domain.Board;
 import com.board.board.domain.oauth.Role;
 import com.board.board.domain.oauth.User;
 import com.board.board.dto.Board.BoardListDto;
+import com.board.board.dto.Board.BoardPostDto;
 import com.board.board.dto.Board.BoardSearchCondition;
 import com.board.board.repository.BoardRepository;
 import com.board.board.repository.oauth.UserRepository;
@@ -13,7 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityManager;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -33,6 +37,9 @@ class BoardServiceTest {
     @Autowired
     BoardService boardService;
 
+    @Autowired
+    EntityManager entityManager;
+
     @Test
     public void 삭제서비스테스트() throws Exception {
         //given
@@ -47,8 +54,13 @@ class BoardServiceTest {
         boardService.deleteBoard(4L);
         boardService.deleteBoard(15L);
 
-        Board board = boardService.findBoard(5L);
-        Board board2 = boardService.findBoard(15L);
+        entityManager.flush();
+        entityManager.clear();
+
+        ResponseEntity<BoardPostDto> board = boardController.findBoard(5L);
+        ResponseEntity<BoardPostDto> board2 = boardController.findBoard(15L);
+
+        entityManager.flush();
 
         //then
         System.out.println("~~~~~~~~~~~~~~~~~~~~~");
