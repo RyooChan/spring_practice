@@ -4,23 +4,18 @@ import com.board.board.controller.BoardController;
 import com.board.board.domain.Board;
 import com.board.board.domain.oauth.Role;
 import com.board.board.domain.oauth.User;
-import com.board.board.dto.Board.BoardListDto;
 import com.board.board.dto.Board.BoardPostDto;
-import com.board.board.dto.Board.BoardSearchCondition;
-import com.board.board.repository.BoardRepository;
+import com.board.board.repository.board.BoardRepository;
 import com.board.board.repository.oauth.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional

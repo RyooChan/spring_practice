@@ -14,7 +14,7 @@ import com.board.board.mapper.Board.BoardPostMapper;
 import com.board.board.mapper.Heart.HeartMapper;
 import com.board.board.mapper.Reply.ReplyPostMapper;
 import com.board.board.mapper.Reply.ReplySaveMapper;
-import com.board.board.repository.BoardRepository;
+import com.board.board.repository.board.BoardRepository;
 import com.board.board.service.BoardApiService;
 import com.board.board.service.BoardService2;
 import lombok.RequiredArgsConstructor;

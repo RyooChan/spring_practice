@@ -6,6 +6,7 @@ import com.board.board.dto.Board.BoardPostDto;
 import com.board.board.dto.Board.BoardSearchCondition;
 import com.board.board.mapper.Board.BoardPostMapper;
 import com.board.board.service.BoardService;
+import com.board.board.service.ReplyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,13 +23,8 @@ import java.util.Optional;
 public class BoardController {
     private final BoardService boardService;
     private final BoardPostMapper boardPostMapper;
+    private final ReplyService replyService;
 
-    /**
-     * 게시글 List 출력
-     * @param condition
-     * @param pageable
-     * @return
-     */
     @GetMapping("/list")
     public Page<BoardListDto> findBoardList(@RequestParam(required = false, defaultValue = "") BoardSearchCondition condition
                                    , @PageableDefault(size = 10) Pageable pageable){
@@ -61,7 +57,9 @@ public class BoardController {
     @DeleteMapping("/post")
     public ResponseEntity deleteBoard(Long boardId){
         boardService.deleteBoard(boardId);
+        replyService.deleteReplyByBoard(boardId);
         return new ResponseEntity(HttpStatus.OK);
     }
+
 
 }

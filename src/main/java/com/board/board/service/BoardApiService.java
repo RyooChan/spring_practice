@@ -4,7 +4,7 @@ import com.board.board.domain.Board;
 import com.board.board.dto.Board.BoardPostDto;
 import com.board.board.mapper.Board.BoardPostMapper;
 import com.board.board.mapper.Board.BoardSaveMapper;
-import com.board.board.repository.BoardRepository;
+import com.board.board.repository.board.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.util.StringUtils;

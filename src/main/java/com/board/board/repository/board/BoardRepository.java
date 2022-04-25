@@ -1,8 +1,6 @@
-package com.board.board.repository;
+package com.board.board.repository.board;
 
 import com.board.board.domain.Board;
-import org.hibernate.annotations.SQLDelete;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

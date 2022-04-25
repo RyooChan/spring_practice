@@ -1,7 +1,7 @@
 package com.board.board.service;
 
 import com.board.board.domain.Reply;
-import com.board.board.repository.ReplyRepository;
+import com.board.board.repository.reply.ReplyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +34,10 @@ public class ReplyService {
         findReply.ifPresent(selectReply->{
             selectReply.setDeleted(true);
         });
+    }
+
+    public long deleteReplyByBoard(Long boardId){
+        return replyRepository.deleteReplyBulk(boardId);
     }
 
 }

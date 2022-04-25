@@ -1,19 +1,14 @@
 package com.board.board.service;
 
 import com.board.board.domain.Board;
-import com.board.board.domain.oauth.User;
 import com.board.board.dto.Board.BoardListDto;
-import com.board.board.dto.Board.BoardPostDto;
-import com.board.board.dto.Board.BoardSaveDto;
 import com.board.board.dto.Board.BoardSearchCondition;
-import com.board.board.repository.BoardRepository;
+import com.board.board.repository.board.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.Optional;
 

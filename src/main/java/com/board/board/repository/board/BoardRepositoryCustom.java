@@ -1,4 +1,4 @@
-package com.board.board.repository;
+package com.board.board.repository.board;
 
 import com.board.board.dto.Board.BoardListDto;
 import com.board.board.dto.Board.BoardSearchCondition;

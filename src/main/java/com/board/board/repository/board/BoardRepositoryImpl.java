@@ -1,4 +1,4 @@
-package com.board.board.repository;
+package com.board.board.repository.board;
 
 import com.board.board.domain.Board;
 //import com.board.board.domain.QBoard;
@@ -6,7 +6,6 @@ import com.board.board.domain.Board;
 import com.board.board.dto.Board.BoardListDto;
 import com.board.board.dto.Board.BoardSearchCondition;
 import com.board.board.dto.Board.QBoardListDto;
-import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -21,7 +20,6 @@ import java.util.List;
 
 import static com.board.board.domain.QBoard.*;
 import static com.board.board.domain.oauth.QUser.*;
-import static com.board.board.dto.Board.QBoardListDto.*;
 
 public class BoardRepositoryImpl implements BoardRepositoryCustom{
 

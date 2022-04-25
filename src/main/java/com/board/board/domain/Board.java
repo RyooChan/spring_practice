@@ -7,6 +7,8 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Entity // DB와의 연결을 위하여
@@ -33,9 +35,9 @@ public class Board {
     private boolean isDeleted = Boolean.FALSE;
 
     // 삭제 CASCADE를 위함
-//    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
-//    private List<Reply> replys = new ArrayList<>();
-//
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    private List<Reply> replys = new ArrayList<>();
+
 //    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
 //    private List<Heart> hearts = new ArrayList<>();
 
