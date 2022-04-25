@@ -7,11 +7,12 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.Optional;
 
 @Entity // DB와의 연결을 위하여
 @Data   // getter setter
-@Where(clause = "is_deleted = true")
-@SQLDelete(sql = "UPDATE board SET is_deleted = true WHERE id = ?")
+//@Where(clause = "is_deleted = true")
+//@SQLDelete(sql = "UPDATE board SET is_deleted = true WHERE id = ?")
 public class Board {
     @Id // id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,6 +47,5 @@ public class Board {
     }
 
     public Board() {
-
     }
 }
