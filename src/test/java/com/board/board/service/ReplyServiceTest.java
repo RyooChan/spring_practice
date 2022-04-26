@@ -63,12 +63,11 @@ class ReplyServiceTest {
         }
 
         //when
-
         long boardIdForReply = 3L;
 
-        for(int i=0; i<10; i++){
+        for(int i=1; i<11; i++){
             ReplySaveDto replySaveDto = new ReplySaveDto((long)i, "내용", user.getId(), boardIdForReply);
-            replyController.saveReply(replySaveDto);
+            ResponseEntity responseEntity = replyController.saveReply(replySaveDto);
         }
         List<ReplyPostDto> body = replyController.findReplyList(boardIdForReply).getBody();
 
@@ -78,6 +77,8 @@ class ReplyServiceTest {
             System.out.println(result);
         }
         System.out.println("~~~~~~~~~~~~~~~~~~~~~");
+
+        assertThat(body.size()).isEqualTo(10);
 
     }
 
