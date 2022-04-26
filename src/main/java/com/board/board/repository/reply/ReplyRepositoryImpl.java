@@ -21,4 +21,6 @@ public class ReplyRepositoryImpl implements ReplyRepositoryCustom{
                 .where(reply.board.isDeleted)
                 .execute();
     }
+
+
 }

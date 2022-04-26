@@ -26,10 +26,12 @@ public class BoardService {
         return boardRepository.findById(id).orElse(null);
     }
 
+    @Transactional
     public Board saveBoard(Board board){
         return boardRepository.save(board);
     }
 
+    @Transactional
     public Board updateBoard(Board board, Long boardId){
         Optional<Board> findBoard = boardRepository.findById(boardId);
         findBoard.ifPresent(selectBoard->{
@@ -39,6 +41,7 @@ public class BoardService {
         return findBoard.orElse(null);
     }
 
+    @Transactional
     public void deleteBoard(Long boardId){
         Optional<Board> findBoard = boardRepository.findById(boardId);
         findBoard.ifPresent(selectBoard->{

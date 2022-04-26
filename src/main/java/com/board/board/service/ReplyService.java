@@ -19,16 +19,19 @@ public class ReplyService {
         return replyRepository.findAllByBoardId(boardId);
     }
 
+    @Transactional
     public Reply saveReply(Reply reply){
         return replyRepository.save(reply);
     }
 
+    @Transactional
     public Reply updateReply(Reply reply){
         Reply findReply = replyRepository.findById(reply.getId());
         findReply.setReplyContent(reply.getReplyContent());
         return reply;
     }
 
+    @Transactional
     public void deleteReply(Long replyId){
         Optional<Reply> findReply = replyRepository.findById(replyId);
         findReply.ifPresent(selectReply->{
