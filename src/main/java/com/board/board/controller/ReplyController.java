@@ -25,7 +25,6 @@ public class ReplyController {
     @GetMapping("/reply")
     public ResponseEntity<List<ReplyPostDto>> findReplyList(@RequestParam("boardId") Long boardId){
         List<Reply> replyList = replyService.findReplyList(boardId);
-        System.out.println(replyList);
         return new ResponseEntity<>(replyPostMapper.toDtos(replyList), HttpStatus.OK);
     }
 
