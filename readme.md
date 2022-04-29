@@ -1,7 +1,7 @@
 # 스프링부트 게시판
 
 **리팩터링 진행중**
-* https://ec2-13-124-106-98.ap-northeast-2.compute.amazonaws.com:8443/
+* AWS프리티어 만료로 인해 계정 해제
 * OSIV, Dirty checking, RESTful개발, 쿼리 최적화 등을 고민하며 진행중입니다.
 
 ## ERD
@@ -20,7 +20,7 @@
 * spring security기능 사용하여 권한과 로그인 여부에 따른 기능 차등 부여
 * https적용 -> 8443포트 
 * AWS를 통한 서버 배포 기능 
-    * 4월달을 마지막으로 해제 예정
+    * 4월달을 마지막으로 해제.
 * [OSIV를 적용](https://hello-backend.tistory.com/148)하여 성능 최적화에 관한 공부 진행
 
 ---
