@@ -39,7 +39,7 @@ public class BoardController {
     }
 
     @PostMapping("/post")
-    public ResponseEntity<BoardPostDto> saveBoard(BoardPostDto boardPostDto){
+    public ResponseEntity<BoardPostDto> saveBoard(@RequestBody BoardPostDto boardPostDto){
         Board board = boardPostMapper.toEntity(boardPostDto);
         Board result = boardService.saveBoard(board);
         BoardPostDto responseBoardInfo = boardPostMapper.toDto(result);
@@ -47,7 +47,7 @@ public class BoardController {
     }
 
     @PutMapping("/post")
-    public ResponseEntity<BoardPostDto> updateBoard(BoardPostDto boardPostDto, Long boardId){
+    public ResponseEntity<BoardPostDto> updateBoard(@RequestBody BoardPostDto boardPostDto, Long boardId){
         Board board = boardPostMapper.toEntity(boardPostDto);
         Board result = boardService.updateBoard(board, boardId);
         BoardPostDto responseBoardInfo = boardPostMapper.toDto(result);
@@ -55,7 +55,7 @@ public class BoardController {
     }
 
     @DeleteMapping("/post")
-    public ResponseEntity deleteBoard(Long boardId){
+    public ResponseEntity deleteBoard(@PathVariable("boardId") Long boardId){
         boardService.deleteBoard(boardId);
         replyService.deleteReplyByBoard(boardId);
         return new ResponseEntity(HttpStatus.OK);
