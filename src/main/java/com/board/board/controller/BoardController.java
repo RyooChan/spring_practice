@@ -32,7 +32,7 @@ public class BoardController {
     }
 
     @GetMapping("/post")
-    public ResponseEntity<BoardPostDto> findBoard(@RequestParam(required = false) Long id){
+    public ResponseEntity<BoardPostDto> findBoard(@RequestParam Long id){
         Board board = boardService.findBoard(id);
         BoardPostDto boardPostDto = boardPostMapper.toDto(board);
         return new ResponseEntity<>(boardPostDto, HttpStatus.OK);

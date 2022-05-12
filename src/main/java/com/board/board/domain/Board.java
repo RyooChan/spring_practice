@@ -13,6 +13,7 @@ import java.util.Optional;
 
 @Entity // DB와의 연결을 위하여
 @Data   // getter setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 //@Where(clause = "is_deleted = true")
 //@SQLDelete(sql = "UPDATE board SET is_deleted = true WHERE id = ?")
 public class Board {
@@ -46,8 +47,5 @@ public class Board {
         this.title = title;
         this.content = content;
         this.user = user;
-    }
-
-    public Board() {
     }
 }

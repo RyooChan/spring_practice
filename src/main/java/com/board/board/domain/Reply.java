@@ -10,6 +10,7 @@ import javax.validation.constraints.Size;
 
 @Entity // DB와의 연결을 위하여
 @Data   // getter setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Reply {
     @Id // id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
