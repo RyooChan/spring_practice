@@ -36,7 +36,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .headers().frameOptions().disable() // h2-console 화면을 사용하기 위해 해당 옵션 disable
                 .and()
                     .authorizeRequests()
-                        .antMatchers("/", "/account/register", "/bootstrap-5.1.3-dist/css/**", "/bootstrap-5.1.3-dist/js/**", "/api/**","/h2-console/**").permitAll()
+                        .antMatchers("/test/**","/", "/account/register", "/bootstrap-5.1.3-dist/css/**", "/bootstrap-5.1.3-dist/js/**", "/api/**","/h2-console/**").permitAll()
                         .anyRequest().authenticated()
                 .and()
                     .formLogin()
